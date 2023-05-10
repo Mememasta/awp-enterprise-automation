@@ -1,0 +1,36 @@
+version: '3.1'
+services:
+  postgresdb:
+    container_name: postgresdb
+    image: postgres:14.1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - postgresdb:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgresdb
+    restart: unless-stopped
+  awp-enterprise-automation:
+    container_name: awp-enterprise-automation
+    image: awp/enterprise-automation
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: r2dbc:postgresql://postgresdb:5432/postgres
+      SPRING_LIQUIBASE_URL: jdbc:postgresql://postgresdb:5432/postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - postgresdb
+    depends_on:
+      - postgresdb
+    restart: unless-stopped
+
+networks:
+  postgresdb:
+    driver: bridge

@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20221211-init-script
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - sqlFile:
+            comment: init script
+            path: db/scripts/INIT_SCRIPT.sql

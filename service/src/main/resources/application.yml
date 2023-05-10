@@ -1,0 +1,38 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  application:
+    name: awp_enterprise_automation
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    properties:
+      schema: ${spring.application.name}
+      encryption-key: this-is-test-key
+      transaction:
+        retry:
+          delay: 4000
+          count: 3
+    pool:
+      enabled: true
+      initial-size: 5
+      max-idle-time: 1m
+      max-size: 50
+  liquibase:
+    url: jdbc:postgresql://localhost:5432/postgres
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    user: ${spring.r2dbc.username}
+    password: ${spring.r2dbc.password}
+    default-schema: ${spring.r2dbc.properties.schema}
+  datasource:
+    hikari:
+      schema: ${spring.application.name}
+cors:
+  allow-credentials: true
+  allowed-origins: "*"
+  allowed-headers: "*"
+  allowed-methods: "*"
+  expected-headers: "*"
+  max-age: 10000
