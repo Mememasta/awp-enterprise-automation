@@ -24,11 +24,20 @@ dependencyManagement {
 }
 
 dependencies {
-    api("org.springframework.boot:spring-boot-starter-validation")
+    val jjwt: String by project
 
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    api("org.springframework.boot:spring-boot-starter-webflux")
+    api("org.springframework.boot:spring-boot-starter-data-r2dbc")
+
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("io.jsonwebtoken:jjwt-api:$jjwt")
+    implementation("io.jsonwebtoken:jjwt-impl:$jjwt")
+
+
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwt")
+    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("org.postgresql:r2dbc-postgresql")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

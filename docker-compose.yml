@@ -2,11 +2,11 @@ version: '3.1'
 services:
   postgresdb:
     container_name: postgresdb
-    image: postgres:14.1
+    image: postgres:15
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      PGDATA: /data/postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/data/postgres
     volumes:
       - postgresdb:/data/postgres
     ports:
@@ -17,9 +17,6 @@ services:
   awp-enterprise-automation:
     container_name: awp-enterprise-automation
     image: awp/enterprise-automation
-    build:
-      context: ./
-      dockerfile: Dockerfile
     environment:
       SPRING_DATASOURCE_URL: r2dbc:postgresql://postgresdb:5432/postgres
       SPRING_LIQUIBASE_URL: jdbc:postgresql://postgresdb:5432/postgres
@@ -34,3 +31,6 @@ services:
 networks:
   postgresdb:
     driver: bridge
+
+volumes:
+  postgresdb:

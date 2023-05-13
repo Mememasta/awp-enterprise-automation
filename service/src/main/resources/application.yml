@@ -30,9 +30,13 @@ spring:
     hikari:
       schema: ${spring.application.name}
 cors:
-  allow-credentials: true
+  allow-credentials: false
   allowed-origins: "*"
   allowed-headers: "*"
   allowed-methods: "*"
   expected-headers: "*"
   max-age: 10000
+
+jwt:
+  secret-key: 'foobar_123456789_foobar_123456789_foobar_123456789_foobar_123456789'
+  expiration-date: 15

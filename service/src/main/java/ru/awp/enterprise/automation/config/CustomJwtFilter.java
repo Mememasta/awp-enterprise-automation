@@ -1,0 +1,23 @@
+package ru.awp.enterprise.automation.config;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.server.WebFilter;
+import ru.awp.enterprise.automation.jwt.JwtFilter;
+import ru.awp.enterprise.automation.jwt.JwtUtils;
+import ru.awp.enterprise.automation.service.UserService;
+
+@Configuration
+@RequiredArgsConstructor
+public class CustomJwtFilter {
+
+    private final JwtUtils jwtUtils;
+    private final UserService userService;
+
+    @Bean
+    public WebFilter jwtFilter() {
+        return new JwtFilter(jwtUtils, userService::findById);
+    }
+
+}
