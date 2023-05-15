@@ -1,9 +1,83 @@
 databaseChangeLog:
   - changeSet:
-      id: 20221211-init-script
+      id: 20230514-init-script
       author: MChuchalov
       runInTransaction: false
       changes:
         - sqlFile:
             comment: init script
             path: db/scripts/INIT_SCRIPT.sql
+
+  - changeSet:
+      id: 20230514-create-products-table
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - createTable:
+            schema: awp_enterprise_automation
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: value
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_defect
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    foreignKeyName: fk_products_user_id
+                    references: users(id)
+              - column:
+                  name: date
+                  type: timestamp with timezone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: area_id
+                  type: UUID
+                  constraints:
+                    foreignKeyName: fk_products_area_id
+                    references: users(id)
+
+  - changeSet:
+      id: 20230514-create-areas-table
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - createTable:
+            schema: awp_enterprise_automation
+            tableName: areas
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 20230514-alter_table_users
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - sqlFile:
+            comment: add foreign key
+            path: db/scripts/ALTER_TABLE_USER.sql

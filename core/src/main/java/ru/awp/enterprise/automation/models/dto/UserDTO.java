@@ -2,7 +2,7 @@ package ru.awp.enterprise.automation.models.dto;
 
 import lombok.Builder;
 
-import java.util.UUID;
+import java.util.List;
 
 @Builder
 public record UserDTO(
@@ -27,9 +27,13 @@ public record UserDTO(
         String phoneNumber,
 
         /*
+          Продукты рабочего
+         */
+        List<ProductDTO> products,
+
+        /*
           Производство к которому привязан работник
          */
-        UUID area
-
+        AreaDTO area
 ) {
 }

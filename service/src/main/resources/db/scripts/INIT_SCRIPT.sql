@@ -5,7 +5,7 @@ create table if not exists awp_enterprise_automation.users
     last_name       varchar(1024) not null,
     phone_number    varchar(1024) not null,
     password        varchar(1024) not null,
-    area            uuid not null,
+    area_id         uuid not null,
     hash            char(128) not null
 );
 
