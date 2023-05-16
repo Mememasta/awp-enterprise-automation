@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.mapper.UserMapper;
+import ru.awp.enterprise.automation.models.dao.UserDAO;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
 import ru.awp.enterprise.automation.repository.UserRepository;
 import ru.awp.enterprise.automation.service.UserService;
@@ -27,5 +28,11 @@ public class UserServiceImpl implements UserService {
         } catch (IllegalArgumentException e) {
             return Mono.error(new RuntimeException(e.getMessage(), e));
         }
+    }
+
+    @Override
+    public Mono<UserDAO> findByPhone(String phoneNumber) {
+        return userRepository.findFirstByPhoneNumber(phoneNumber)
+                    .switchIfEmpty(Mono.empty());
     }
 }

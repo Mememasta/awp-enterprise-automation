@@ -28,9 +28,9 @@ dependencies {
 
     api("org.springframework.boot:spring-boot-starter-webflux")
     api("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    api("org.springframework.boot:spring-boot-starter-security")
 
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("io.jsonwebtoken:jjwt-api:$jjwt")
     implementation("io.jsonwebtoken:jjwt-impl:$jjwt")
 
