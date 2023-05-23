@@ -51,6 +51,11 @@ databaseChangeLog:
                   constraints:
                     foreignKeyName: fk_products_area_id
                     references: users(id)
+              - column:
+                  name: status
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: 20230514-create-areas-table
@@ -72,12 +77,3 @@ databaseChangeLog:
                   type: varchar(256)
                   constraints:
                     nullable: false
-
-  - changeSet:
-      id: 20230514-alter_table_users
-      author: MChuchalov
-      runInTransaction: false
-      changes:
-        - sqlFile:
-            comment: add foreign key
-            path: db/scripts/ALTER_TABLE_USER.sql

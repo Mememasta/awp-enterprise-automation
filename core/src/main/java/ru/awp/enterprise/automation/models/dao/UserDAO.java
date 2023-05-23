@@ -7,6 +7,7 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,8 +24,8 @@ public record UserDAO(
         String phoneNumber,
         @Column(value = "password")
         String password,
-        @Column(value = "area_id")
-        UUID area,
+        @Column(value = "authorities")
+        List<String> authorities,
         @Column(value = "hash")
         String hash
 ) implements Persistable<UUID> {

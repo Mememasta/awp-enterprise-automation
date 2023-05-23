@@ -22,6 +22,8 @@ public record ProductDAO(
     @Column(value = "date")
     OffsetDateTime date,
     @Column(value = "area_id")
-    UUID area
+    UUID area,
+    @Column(value = "status")
+    String status
 ) {
 }

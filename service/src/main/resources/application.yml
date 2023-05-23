@@ -40,3 +40,20 @@ cors:
 jwt:
   secret-key: 'foobar_123456789_foobar_123456789_foobar_123456789_foobar_123456789'
   expiration-date: 15
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info,metric
+  endpoint:
+    health:
+      enabled: true
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true

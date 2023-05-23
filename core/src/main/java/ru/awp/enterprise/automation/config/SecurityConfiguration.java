@@ -35,11 +35,11 @@ public class SecurityConfiguration {
                 .exceptionHandling()
                 .and()
                 .authorizeExchange(it -> it
-                        .anyExchange().permitAll()
                         .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers("/auth").permitAll()
                         .pathMatchers("/signup").hasRole("USER")
                         .pathMatchers("/**").hasRole("USER") //todo вынести в отдельный класс enum
+                        .anyExchange().permitAll()
                 )
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .build();

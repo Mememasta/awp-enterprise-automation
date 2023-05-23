@@ -27,13 +27,13 @@ public record UserDTO(
         String phoneNumber,
 
         /*
-          Продукты рабочего
+          Список ролей работника
          */
-        List<ProductDTO> products,
+        List<String> authorities,
 
         /*
-          Производство к которому привязан работник
+          Продукты рабочего
          */
-        AreaDTO area
+        List<ProductDTO> products
 ) {
 }

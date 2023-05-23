@@ -16,6 +16,7 @@ public class UserMapper implements Function<UserDAO, UserDTO> {
                 .firstName(userDAO.firstName())
                 .lastName(userDAO.lastName())
                 .phoneNumber(userDAO.phoneNumber())
+                .authorities(userDAO.authorities())
                 .build();
     }
 }

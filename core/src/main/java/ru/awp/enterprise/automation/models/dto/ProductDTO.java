@@ -34,6 +34,11 @@ public record ProductDTO(
         /*
           Производство на котором находится продукт
          */
-        AreaDTO area
+        AreaDTO area,
+
+        /*
+          Состояние продукции (Произведено/Отгружено)
+         */
+        String status
 ) {
 }
