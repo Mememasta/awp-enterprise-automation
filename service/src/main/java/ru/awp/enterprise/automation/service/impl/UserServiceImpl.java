@@ -2,7 +2,9 @@ package ru.awp.enterprise.automation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
+import ru.awp.enterprise.automation.exception.ClientNotFoundException;
 import ru.awp.enterprise.automation.mapper.UserMapper;
 import ru.awp.enterprise.automation.models.dao.UserDAO;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
@@ -34,5 +36,12 @@ public class UserServiceImpl implements UserService {
     public Mono<UserDAO> findByPhone(String phoneNumber) {
         return userRepository.findFirstByPhoneNumber(phoneNumber)
                     .switchIfEmpty(Mono.empty());
+    }
+
+    @Override
+    @Transactional
+    public Mono<UserDAO> save(UserDAO userDAO) {
+        return userRepository.save(userDAO)
+                .onErrorResume(e -> Mono.error(new ClientNotFoundException()));
     }
 }

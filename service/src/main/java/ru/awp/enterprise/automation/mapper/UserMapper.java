@@ -16,8 +16,6 @@ public class UserMapper implements Function<UserDAO, UserDTO> {
                 .firstName(userDAO.firstName())
                 .lastName(userDAO.lastName())
                 .phoneNumber(userDAO.phoneNumber())
-                .products(userDAO.productDTOList())
-                .area(userDAO.areaDTO())
                 .build();
     }
 }

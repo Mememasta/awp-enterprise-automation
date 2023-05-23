@@ -2,18 +2,16 @@ package ru.awp.enterprise.automation.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.awp.enterprise.automation.models.response.LoginResponse;
-import ru.awp.enterprise.automation.models.dto.UserDTO;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @Component
-public class LoginResponseMapper implements BiFunction<UserDTO, String, LoginResponse> {
+public class LoginResponseMapper implements Function<String, LoginResponse> {
 
     @Override
-    public LoginResponse apply(UserDTO userDTO, String token) {
+    public LoginResponse apply(String token) {
         return LoginResponse.builder()
                 .accessToken(token)
-                .user(userDTO)
                 .build();
     }
 }

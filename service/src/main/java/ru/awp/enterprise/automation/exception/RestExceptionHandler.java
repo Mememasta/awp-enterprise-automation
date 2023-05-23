@@ -12,4 +12,9 @@ public class RestExceptionHandler {
     ResponseEntity<Object> clientNotFound() {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(ClientAlreadyExistsException.class)
+    ResponseEntity<Object> clientAlreadyExist() {
+        return new ResponseEntity<>(HttpStatus.FOUND);
+    }
 }

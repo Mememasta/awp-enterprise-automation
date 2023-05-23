@@ -16,4 +16,6 @@ public interface UserService {
 
     Mono<UserDAO> findByPhone(String phoneNumber);
 
+    Mono<UserDAO> save(UserDAO userDAO);
+
 }

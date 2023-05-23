@@ -4,14 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import org.springframework.web.server.WebFilter;
@@ -25,12 +22,6 @@ import ru.awp.enterprise.automation.config.properties.JwtProperties;
 public class SecurityConfiguration {
 
     private final WebFilter jwtFilter;
-    private final ReactiveAuthenticationManager authenticationManager;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
@@ -44,11 +35,12 @@ public class SecurityConfiguration {
                 .exceptionHandling()
                 .and()
                 .authorizeExchange(it -> it
-                        .pathMatchers("/auth").permitAll()
-                        .pathMatchers("/**").hasRole("USER") //todo вынести в отдельный класс enum
                         .anyExchange().permitAll()
+                        .pathMatchers("/actuator/**").permitAll()
+                        .pathMatchers("/auth").permitAll()
+                        .pathMatchers("/signup").hasRole("USER")
+                        .pathMatchers("/**").hasRole("USER") //todo вынести в отдельный класс enum
                 )
-                .authenticationManager(authenticationManager)
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .build();
     }

@@ -26,33 +26,44 @@ public class JwtUtils {
     /**
      * Сгенерировать токен по идентификатору работника
      *
-     * @param subject идентификатор клиента
+     * @param id идентификатор клиента
      * @return jwt-токен
      */
-    public String issueToken(String subject) {
-        return issueToken(subject, Map.of());
+    public String issueToken(String id) {
+        return issueToken(id, null, Map.of());
+    }
+
+    /**
+     * Сгенерировать токен по идентификатору работника и паролю
+     *
+     * @param id идентификатор клиента
+     * @param subject пароль клиента
+     * @return jwt-токен
+     */
+    public String issueToken(String id, String subject) {
+        return issueToken(id, subject, Map.of());
     }
 
     /**
      * Сгенерировать токен по идентификатору работника с ролью
      *
-     * @param subject идентификатор работника
+     * @param id идентификатор работника
      * @param scopes перечесление ролей
      * @return jwt-токен
      */
-    public String issueToken(String subject, String ...scopes) {
-        return issueToken(subject, Map.of("scopes", scopes));
+    public String issueToken(String id, String ...scopes) {
+        return issueToken(id, null, Map.of("scopes", scopes));
     }
 
     /**
      * Сгенерировать токен по идентификатору работника с ролью
      *
-     * @param subject идентификатор работника
+     * @param id идентификатор работника
      * @param scopes список ролей
      * @return jwt-токен
      */
-    public String issueToken(String subject, List<String> scopes) {
-        return issueToken(subject, Map.of("scopes", scopes));
+    public String issueToken(String id, List<String> scopes) {
+        return issueToken(id, null, Map.of("scopes", scopes));
     }
 
     /**
@@ -63,11 +74,13 @@ public class JwtUtils {
      * @return jwt-токен
      */
     public String issueToken(
+            String id,
             String subject,
             Map<String, Object> claims) {
         return Jwts
                 .builder()
                 .setClaims(claims)
+                .setId(id)
                 .setSubject(subject)
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(
@@ -84,6 +97,16 @@ public class JwtUtils {
      *
      * @param token jwt-токен
      * @return идентификатор работника
+     */
+    public String getId(String token) {
+        return getClaims(token).getId();
+    }
+
+    /**
+     * Получить пароль работника по jwt-токену
+     *
+     * @param token jwt-токен
+     * @return пароль работника
      */
     public String getSubject(String token) {
         return getClaims(token).getSubject();
@@ -112,11 +135,11 @@ public class JwtUtils {
      * Является ли токен валидным
      *
      * @param jwt токен
-     * @param id идентификатор работника
+     * @param phoneNumber идентификатор работника
      */
-    public boolean isTokenValid(String jwt, String id) {
-        var subject = getSubject(jwt);
-        return Objects.equals(subject, id) && !isTokenExpired(jwt);
+    public boolean isTokenValid(String jwt, String phoneNumber) {
+        var id = getId(jwt);
+        return Objects.equals(id, phoneNumber) && !isTokenExpired(jwt);
     }
 
     /**
