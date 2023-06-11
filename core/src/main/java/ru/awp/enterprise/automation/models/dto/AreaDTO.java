@@ -1,18 +1,16 @@
 package ru.awp.enterprise.automation.models.dto;
 
+import lombok.Builder;
+
 import java.util.List;
 import java.util.UUID;
 
+@Builder
 public record AreaDTO(
         /*
           Идентификатор производства
          */
         UUID id,
-
-        /*
-          Список рабочих
-         */
-        List<UserDTO> users,
 
         /*
           Название производства
