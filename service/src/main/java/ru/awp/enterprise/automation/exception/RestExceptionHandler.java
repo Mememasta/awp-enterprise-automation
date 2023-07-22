@@ -17,4 +17,9 @@ public class RestExceptionHandler {
     ResponseEntity<Object> clientAlreadyExist() {
         return new ResponseEntity<>(HttpStatus.FOUND);
     }
+
+    @ExceptionHandler(NotFoundProductException.class)
+    ResponseEntity<Object> productNotFound() {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

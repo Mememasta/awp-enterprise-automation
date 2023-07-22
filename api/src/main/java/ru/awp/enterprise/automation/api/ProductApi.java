@@ -1,24 +1,22 @@
 package ru.awp.enterprise.automation.api;
 
-
-import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.models.dto.ProductDTO;
+import ru.awp.enterprise.automation.models.request.ProductRequest;
 
-import java.util.List;
-import java.util.UUID;
-
+@RequestMapping(value = "/v1/api/product")
 public interface ProductApi {
 
-    @GetMapping(value = "/{area_id}")
-    Flux<ProductDTO> getProductsByAreaId(@PathVariable("area_id") @NotNull UUID areaId);
+    @GetMapping(value = "/")
+    Flux<ProductDTO> getProducts();
+
+    @GetMapping(value = "/{id}")
+    Mono<ProductDTO> getProduct(@PathVariable(value = "id") Long id);
 
     @PostMapping(value = "/")
-    Flux<ProductDTO> saveProductsByAreaId(@RequestBody @Validated List<ProductDTO> productDTO);
+    Mono add(@RequestBody @Validated ProductRequest request);
 
 }

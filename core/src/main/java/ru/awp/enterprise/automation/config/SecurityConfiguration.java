@@ -36,8 +36,9 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeExchange(it -> it
                         .pathMatchers("/actuator/**").permitAll()
-                        .pathMatchers("/auth").permitAll()
-                        .pathMatchers("/signup").hasRole("USER")
+                        .pathMatchers("/metrics").permitAll()
+                        .pathMatchers("/api/v1/authentication/auth").permitAll()
+                        .pathMatchers("/api/v1/authentication/signup").hasRole("USER")
                         .pathMatchers("/**").hasRole("USER") //todo вынести в отдельный класс enum
                         .anyExchange().permitAll()
                 )

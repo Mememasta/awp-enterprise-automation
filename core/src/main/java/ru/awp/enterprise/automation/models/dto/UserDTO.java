@@ -34,6 +34,6 @@ public record UserDTO(
         /*
           Продукты рабочего
          */
-        List<ProductDTO> products
+        List<NoteDTO> products
 ) {
 }

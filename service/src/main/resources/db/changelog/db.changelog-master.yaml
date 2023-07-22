@@ -9,29 +9,19 @@ databaseChangeLog:
             path: db/scripts/INIT_SCRIPT.sql
 
   - changeSet:
-      id: 20230514-create-products-table
+      id: 20230514-create-notes-table
       author: MChuchalov
       runInTransaction: false
       changes:
         - createTable:
             schema: awp_enterprise_automation
-            tableName: products
+            tableName: notes
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: uuid
                   constraints:
                     primaryKey: true
-                    nullable: false
-              - column:
-                  name: value
-                  type: bigint
-                  constraints:
-                    nullable: false
-              - column:
-                  name: is_defect
-                  type: boolean
-                  constraints:
                     nullable: false
               - column:
                   name: user_id
@@ -40,35 +30,50 @@ databaseChangeLog:
                     foreignKeyName: fk_products_user_id
                     references: users(id)
               - column:
-                  name: date
+                  name: user_edit_id
+                  type: UUID
+                  constraints:
+                    foreignKeyName: fk_products_user_edit_id
+                    references: users(id)
+              - column:
+                  name: created
                   type: timestamp with timezone
                   defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
               - column:
-                  name: area_id
-                  type: UUID
-                  constraints:
-                    foreignKeyName: fk_products_area_id
-                    references: users(id)
-              - column:
-                  name: status
-                  type: varchar(128)
+                  name: updated
+                  type: timestamp with timezone
+                  defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
-
+              - column:
+                  name: area
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
   - changeSet:
-      id: 20230514-create-areas-table
-      author: MChuchalov
-      runInTransaction: false
-      changes:
+        id: 20230514-create-products-table
+        author: MChuchalov
+        runInTransaction: false
+        changes:
         - createTable:
             schema: awp_enterprise_automation
-            tableName: areas
+            tableName: products
             columns:
               - column:
-                  name: id
-                  type: UUID
+                  name: product_id
+                  type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -77,3 +82,34 @@ databaseChangeLog:
                   type: varchar(256)
                   constraints:
                     nullable: false
+              - column:
+                  name: is_available
+                  type: boolean
+  - changeSet:
+      id: 20230514-create-notes-products-table
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - createTable:
+            schema: awp_enterprise_automation
+            tableName: notes_products
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: note_id
+                  type: UUID
+              - column:
+                  name: product_id
+                  type: bigint
+              - column:
+                  name: value
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_defect
+                  type: boolean

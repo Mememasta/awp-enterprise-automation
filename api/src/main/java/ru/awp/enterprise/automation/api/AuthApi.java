@@ -4,11 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.models.request.LoginRequest;
 import ru.awp.enterprise.automation.models.request.SignUpRequest;
 import ru.awp.enterprise.automation.models.response.LoginResponse;
 
+@RequestMapping(value = "/api/v1/authentication")
 public interface AuthApi {
 
     @PostMapping(value = "/auth")

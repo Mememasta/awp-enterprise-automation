@@ -13,7 +13,7 @@ import ru.awp.enterprise.automation.models.response.LoginResponse;
 import ru.awp.enterprise.automation.service.LoginService;
 
 @Slf4j
-@RestController(value = "/api/v1/authentication")
+@RestController
 @RequiredArgsConstructor
 public class AuthController implements AuthApi {
     private final LoginService loginService;

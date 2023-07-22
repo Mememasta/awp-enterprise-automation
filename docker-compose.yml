@@ -14,7 +14,7 @@ services:
     networks:
       - postgresdb
     restart: unless-stopped
-  awp-enterprise-automation:
+  backend:
     container_name: awp-enterprise-automation
     image: awp/enterprise-automation
     environment:
@@ -24,13 +24,36 @@ services:
       - "8080:8080"
     networks:
       - postgresdb
+      - backend
     depends_on:
       - postgresdb
     restart: unless-stopped
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - prometheus_data:/prometheus
+    ports:
+      - '9090:9090'
+    networks:
+      - backend
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    ports:
+      - '3000:3000'
 
 networks:
   postgresdb:
     driver: bridge
+  backend:
+    driver: bridge
 
 volumes:
   postgresdb:
+  prometheus_data:
+  grafana_data:
