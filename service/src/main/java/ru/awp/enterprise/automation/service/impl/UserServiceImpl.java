@@ -3,6 +3,7 @@ package ru.awp.enterprise.automation.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.exception.ClientNotFoundException;
 import ru.awp.enterprise.automation.mapper.UserMapper;
@@ -30,6 +31,13 @@ public class UserServiceImpl implements UserService {
         } catch (IllegalArgumentException e) {
             return Mono.error(new RuntimeException(e.getMessage(), e));
         }
+    }
+
+    @Override
+    public Flux<UserDTO> findAll() {
+        return userRepository.findAll()
+                .map(userMapper)
+                .switchIfEmpty(Mono.empty());
     }
 
     @Override

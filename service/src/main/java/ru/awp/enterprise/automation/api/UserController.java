@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.exception.ClientNotFoundException;
 import ru.awp.enterprise.automation.mapper.UserMapper;
@@ -27,5 +28,10 @@ public class UserController implements UserApi{
                 .map(userMapper)
                 .switchIfEmpty(Mono.error(ClientNotFoundException::new));
 
+    }
+
+    @Override
+    public Flux<UserDTO> getAllUser() {
+        return userService.findAll();
     }
 }

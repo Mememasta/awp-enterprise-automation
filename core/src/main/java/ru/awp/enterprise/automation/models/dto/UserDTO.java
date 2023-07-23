@@ -1,5 +1,6 @@
 package ru.awp.enterprise.automation.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 import java.util.List;
@@ -14,26 +15,31 @@ public record UserDTO(
         /*
           Имя работника
          */
+        @JsonProperty(value = "first_name")
         String firstName,
 
         /*
           Фамилия работника
          */
+        @JsonProperty(value = "last_name")
         String lastName,
 
         /*
           Номер телефона работника
          */
+        @JsonProperty(value = "phone_number")
         String phoneNumber,
 
         /*
           Список ролей работника
          */
+        @JsonProperty(value = "authorities")
         List<String> authorities,
 
         /*
           Продукты рабочего
          */
-        List<NoteDTO> products
+        @JsonProperty(value = "notes")
+        List<NoteDTO> notes
 ) {
 }

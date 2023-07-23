@@ -1,6 +1,8 @@
 package ru.awp.enterprise.automation.models.dao;
 
 import lombok.Builder;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -8,6 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table(name = "products")
 public record ProductDAO(
 
+        @Id
         @Column(value = "product_id")
         Long productId,
         @Column(value = "name")
@@ -15,5 +18,14 @@ public record ProductDAO(
         @Column(value = "is_available")
         boolean isAvailable
 
-) {
+)  implements Persistable<Long> {
+        @Override
+        public Long getId() {
+                return productId;
+        }
+
+        @Override
+        public boolean isNew() {
+                return true;
+        }
 }

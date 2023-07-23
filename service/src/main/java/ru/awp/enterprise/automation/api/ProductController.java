@@ -29,8 +29,8 @@ public class ProductController implements ProductApi {
     }
 
     @Override
-    public Mono add(ProductRequest request) {
+    public Mono<ResponseEntity<HttpStatus>> add(ProductRequest request) {
         return productService.add(request)
-                .flatMap(it -> Mono.just(new ResponseEntity(HttpStatus.CREATED)));
+                .then(Mono.defer(() -> Mono.just(new ResponseEntity<>(HttpStatus.CREATED))));
     }
 }
