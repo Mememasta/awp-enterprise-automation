@@ -6,14 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -39,7 +37,7 @@ public class JwtFilter implements WebFilter {
                 .orElse(Mono.empty());
 
         var authentication = claims.filter(claim -> jwtUtils.isTokenValid(jwt, claim.getId()))
-                .flatMap(claim -> authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(claim.getId(), claim.getSubject(), List.of(new SimpleGrantedAuthority("ROLE_USER")))));
+                .flatMap(claim -> authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(claim.getId(), claim.getSubject())));
         var context = authentication.map(ReactiveSecurityContextHolder::withAuthentication)
                 .map(Optional::of)
                 .defaultIfEmpty(Optional.empty());

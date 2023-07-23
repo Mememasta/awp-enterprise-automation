@@ -2,6 +2,9 @@ package ru.awp.enterprise.automation.models.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
+
+import java.util.List;
 
 public record SignUpRequest(
         @NotBlank
@@ -15,6 +18,10 @@ public record SignUpRequest(
         @NotBlank
         @JsonProperty("phone_number")
         String phoneNumber,
+
+        @Builder.Default
+        @JsonProperty("authorities")
+        List<String> authorities,
 
         @NotBlank
         @JsonProperty("password")

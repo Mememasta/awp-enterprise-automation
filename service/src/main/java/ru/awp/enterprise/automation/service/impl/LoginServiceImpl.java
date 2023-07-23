@@ -3,7 +3,6 @@ package ru.awp.enterprise.automation.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -18,8 +17,6 @@ import ru.awp.enterprise.automation.models.request.SignUpRequest;
 import ru.awp.enterprise.automation.models.response.LoginResponse;
 import ru.awp.enterprise.automation.service.LoginService;
 import ru.awp.enterprise.automation.service.UserService;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,8 +39,7 @@ public class LoginServiceImpl implements LoginService {
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.phoneNumber(),
-                        request.password(),
-                        List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                        request.password()
                 )
         );
         return authentication

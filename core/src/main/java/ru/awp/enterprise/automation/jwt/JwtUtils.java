@@ -5,15 +5,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import ru.awp.enterprise.automation.config.properties.JwtProperties;
 
 import java.security.Key;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -62,8 +60,8 @@ public class JwtUtils {
      * @param scopes список ролей
      * @return jwt-токен
      */
-    public String issueToken(String id, List<String> scopes) {
-        return issueToken(id, null, Map.of("scopes", scopes));
+    public String issueToken(String id, String subject, Collection<? extends GrantedAuthority> scopes) {
+        return issueToken(id, subject, Map.of("scopes", scopes));
     }
 
     /**

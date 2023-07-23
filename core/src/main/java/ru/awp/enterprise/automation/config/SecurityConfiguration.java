@@ -38,8 +38,10 @@ public class SecurityConfiguration {
                         .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers("/metrics").permitAll()
                         .pathMatchers("/api/v1/authentication/auth").permitAll()
-                        .pathMatchers("/api/v1/authentication/signup").hasRole("USER")
-                        .pathMatchers("/**").hasRole("USER") //todo вынести в отдельный класс enum
+                        .pathMatchers("/api/v1/user/me").hasRole("USER")
+                        .pathMatchers("/api/v1/user/*").hasRole("ADMIN")
+                        .pathMatchers("/api/v1/authentication/signup").hasRole("ADMIN")
+                        .pathMatchers("/**").hasRole("USER")
                         .anyExchange().permitAll()
                 )
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())

@@ -18,7 +18,7 @@ services:
     container_name: awp-enterprise-automation
     image: awp/enterprise-automation
     environment:
-      SPRING_DATASOURCE_URL: r2dbc:postgresql://postgresdb:5432/postgres
+      SPRING_R2DBC_URL: r2dbc:postgresql://postgresdb:5432/postgres
       SPRING_LIQUIBASE_URL: jdbc:postgresql://postgresdb:5432/postgres
     ports:
       - "8080:8080"

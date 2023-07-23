@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.models.dao.UserDAO;
@@ -25,6 +26,7 @@ public class CustomAuthenticationManager implements ReactiveAuthenticationManage
         var userDAO = Mono.just(authentication)
                 .flatMap(auth -> userService.apply(auth.getPrincipal().toString()))
                 .filter(user -> passwordEncoder.matches(password, user.password()));
-        return userDAO.map(it -> new UsernamePasswordAuthenticationToken(it.phoneNumber(), password, authentication.getAuthorities()));
+        return userDAO.map(it -> new UsernamePasswordAuthenticationToken(it.phoneNumber(), password,
+                it.authorities().stream().map(SimpleGrantedAuthority::new).toList()));
     }
 }

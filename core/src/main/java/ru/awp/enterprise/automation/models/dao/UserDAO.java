@@ -1,5 +1,6 @@
 package ru.awp.enterprise.automation.models.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -25,9 +26,7 @@ public record UserDAO(
         @Column(value = "password")
         String password,
         @Column(value = "authorities")
-        List<String> authorities,
-        @Column(value = "hash")
-        String hash
+        List<String> authorities
 ) implements Persistable<UUID> {
 
         @Override
@@ -36,6 +35,7 @@ public record UserDAO(
         }
 
         @Override
+        @JsonIgnore
         @Transient
         public boolean isNew() {
                 return Objects.isNull(this.id);

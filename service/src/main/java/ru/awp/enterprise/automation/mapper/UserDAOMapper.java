@@ -5,7 +5,6 @@ import ru.awp.enterprise.automation.models.dao.UserDAO;
 import ru.awp.enterprise.automation.models.request.SignUpRequest;
 import ru.awp.enterprise.automation.models.request.UserChangeRequest;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
@@ -14,11 +13,12 @@ public class UserDAOMapper implements BiFunction<SignUpRequest, String, UserDAO>
 
     @Override
     public UserDAO apply(SignUpRequest signUpRequest, String password) {
+
         return UserDAO.builder()
                 .firstName(signUpRequest.firstName())
                 .lastName(signUpRequest.lastName())
                 .phoneNumber(signUpRequest.phoneNumber())
-                .authorities(List.of()) //todo передавать роль пользователя из запроса
+                .authorities(signUpRequest.authorities())
                 .password(password)
                 .build();
 
