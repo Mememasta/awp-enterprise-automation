@@ -18,6 +18,12 @@ public interface ProductApi {
     @GetMapping(value = "/{id}")
     Mono<ProductDTO> getProduct(@PathVariable(value = "id") Long id);
 
+    @PatchMapping(value = "/{id}")
+    Mono<ResponseEntity<HttpStatus>> updateProduct(@PathVariable(value = "id") Long id, @RequestBody @Validated ProductRequest request);
+
+    @DeleteMapping(value = "/{id}")
+    Mono<ResponseEntity<HttpStatus>> deleteProduct(@PathVariable(value = "id") Long id);
+
     @PostMapping(value = "/add")
     Mono<ResponseEntity<HttpStatus>> add(@RequestBody @Validated ProductRequest request);
 

@@ -6,6 +6,8 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.Objects;
+
 @Builder
 @Table(name = "products")
 public record ProductDAO(
@@ -26,6 +28,6 @@ public record ProductDAO(
 
         @Override
         public boolean isNew() {
-                return true;
+                return Objects.isNull(getId());
         }
 }

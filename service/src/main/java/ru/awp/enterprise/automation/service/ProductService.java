@@ -13,4 +13,8 @@ public interface ProductService {
 
     Mono<Void> add(ProductRequest productRequest);
 
+    Mono<Void> updateProduct(Long id, ProductRequest productRequest);
+
+    Mono<Void> deleteProduct(Long id);
+
 }

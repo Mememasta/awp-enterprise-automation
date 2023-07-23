@@ -5,9 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record ProductRequest(
-        @NotNull
-        @JsonProperty(value = "product_id")
-        Long productId,
 
         @NotBlank
         @JsonProperty(value = "name")

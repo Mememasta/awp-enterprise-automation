@@ -6,9 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.exception.ClientNotFoundException;
+import ru.awp.enterprise.automation.mapper.UserDAOMapper;
 import ru.awp.enterprise.automation.mapper.UserMapper;
 import ru.awp.enterprise.automation.models.dao.UserDAO;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
+import ru.awp.enterprise.automation.models.request.UserChangeRequest;
 import ru.awp.enterprise.automation.repository.UserRepository;
 import ru.awp.enterprise.automation.service.UserService;
 
@@ -20,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserDAOMapper userDAOMapper;
 
     @Override
     public Mono<UserDTO> findById(String id) {
@@ -51,5 +54,21 @@ public class UserServiceImpl implements UserService {
     public Mono<UserDAO> save(UserDAO userDAO) {
         return userRepository.save(userDAO)
                 .onErrorResume(e -> Mono.error(new ClientNotFoundException()));
+    }
+
+    @Override
+    @Transactional
+    public Mono<Void> update(UUID uuid, UserChangeRequest request) {
+        return userRepository.findById(uuid)
+                .switchIfEmpty(Mono.error(ClientNotFoundException::new))
+                .flatMap(user -> userRepository.save(userDAOMapper.apply(uuid, request, user)))
+                .flatMap(it -> Mono.empty());
+    }
+
+    @Override
+    public Mono<Void> delete(UUID uuid) {
+        return userRepository.findById(uuid)
+                .switchIfEmpty(Mono.error(ClientNotFoundException::new))
+                .flatMap(user -> userRepository.deleteById(uuid));
     }
 }

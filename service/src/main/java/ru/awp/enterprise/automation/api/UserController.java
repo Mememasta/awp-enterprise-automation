@@ -2,6 +2,8 @@ package ru.awp.enterprise.automation.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +12,10 @@ import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.exception.ClientNotFoundException;
 import ru.awp.enterprise.automation.mapper.UserMapper;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
+import ru.awp.enterprise.automation.models.request.UserChangeRequest;
 import ru.awp.enterprise.automation.service.UserService;
+
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -34,4 +39,17 @@ public class UserController implements UserApi{
     public Flux<UserDTO> getAllUser() {
         return userService.findAll();
     }
+
+    @Override
+    public Mono<ResponseEntity<HttpStatus>> updateUser(UUID id, UserChangeRequest userChangeRequest) {
+        return userService.update(id, userChangeRequest)
+                .then(Mono.defer(() -> Mono.just(new ResponseEntity<>(HttpStatus.OK))));
+    }
+
+    @Override
+    public Mono<ResponseEntity<HttpStatus>> deleteUser(UUID id) {
+        return userService.delete(id)
+                .then(Mono.defer(() -> Mono.just(new ResponseEntity<>(HttpStatus.OK))));
+    }
+
 }

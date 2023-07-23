@@ -1,10 +1,15 @@
 package ru.awp.enterprise.automation.api;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
+import ru.awp.enterprise.automation.models.request.UserChangeRequest;
+
+import java.util.UUID;
 
 @RequestMapping(value = "/api/v1/user")
 public interface UserApi {
@@ -14,5 +19,11 @@ public interface UserApi {
 
     @GetMapping(value = "/all")
     Flux<UserDTO> getAllUser();
+
+    @PatchMapping(value = "/{id}")
+    Mono<ResponseEntity<HttpStatus>> updateUser(@PathVariable(value = "id") UUID id, @RequestBody @Validated UserChangeRequest userChangeRequest);
+
+    @DeleteMapping(value = "/{id}")
+    Mono<ResponseEntity<HttpStatus>> deleteUser(@PathVariable(value = "id") UUID id);
 
 }

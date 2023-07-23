@@ -74,6 +74,7 @@ databaseChangeLog:
               - column:
                   name: product_id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false

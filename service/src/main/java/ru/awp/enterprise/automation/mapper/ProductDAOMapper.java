@@ -12,7 +12,14 @@ public class ProductDAOMapper implements Function<ProductRequest, ProductDAO> {
     @Override
     public ProductDAO apply(ProductRequest request) {
         return ProductDAO.builder()
-                .productId(request.productId())
+                .name(request.name())
+                .isAvailable(request.isAvailable())
+                .build();
+    }
+
+    public ProductDAO apply(Long id, ProductRequest request) {
+        return ProductDAO.builder()
+                .productId(id)
                 .name(request.name())
                 .isAvailable(request.isAvailable())
                 .build();

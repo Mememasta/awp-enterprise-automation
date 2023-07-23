@@ -29,6 +29,18 @@ public class ProductController implements ProductApi {
     }
 
     @Override
+    public Mono<ResponseEntity<HttpStatus>> updateProduct(Long id, ProductRequest request) {
+        return productService.updateProduct(id, request)
+                .then(Mono.defer(() -> Mono.just(new ResponseEntity<>(HttpStatus.OK))));
+    }
+
+    @Override
+    public Mono<ResponseEntity<HttpStatus>> deleteProduct(Long id) {
+        return productService.deleteProduct(id)
+                .then(Mono.defer(() -> Mono.just(new ResponseEntity<>(HttpStatus.OK))));
+    }
+
+    @Override
     public Mono<ResponseEntity<HttpStatus>> add(ProductRequest request) {
         return productService.add(request)
                 .then(Mono.defer(() -> Mono.just(new ResponseEntity<>(HttpStatus.CREATED))));
