@@ -41,8 +41,4 @@ public class RestExceptionHandler {
                 .message(exception)
                 .build();
     }
-    @ExceptionHandler(ProductAlreadyExist.class)
-    ResponseEntity<Object> productAlreadyExist() {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
 }
