@@ -69,6 +69,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Mono<Void> changePassword(UUID uuid, String password) {
+        return userRepository.findById(uuid)
+                .switchIfEmpty(Mono.error(ClientNotFoundException::new))
+                .flatMap(user -> userRepository.save(userDAOMapper.apply(user, password)))
+                .flatMap(it -> Mono.empty());
+    }
+
+    @Override
     public Mono<Void> delete(UUID uuid) {
         return userRepository.findById(uuid)
                 .switchIfEmpty(Mono.error(ClientNotFoundException::new))

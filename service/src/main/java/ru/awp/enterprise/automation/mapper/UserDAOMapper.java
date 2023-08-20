@@ -35,4 +35,16 @@ public class UserDAOMapper implements BiFunction<SignUpRequest, String, UserDAO>
                 .build();
 
     }
+
+    public UserDAO apply(UserDAO userDAO, String password) {
+        return UserDAO.builder()
+                .id(userDAO.id())
+                .firstName(userDAO.firstName())
+                .lastName(userDAO.lastName())
+                .phoneNumber(userDAO.phoneNumber())
+                .authorities(userDAO.authorities())
+                .password(password)
+                .build();
+
+    }
 }

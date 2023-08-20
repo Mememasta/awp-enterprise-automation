@@ -30,6 +30,7 @@ public interface UserService {
 
     Mono<UserDAO> save(UserDAO userDAO);
     Mono<Void> update(UUID uuid, UserChangeRequest request);
+    Mono<Void> changePassword(UUID uuid, String password);
     Mono<Void> delete(UUID uuid);
 
 }

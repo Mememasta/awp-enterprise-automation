@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
+import ru.awp.enterprise.automation.models.request.UserChangePasswordRequest;
 import ru.awp.enterprise.automation.models.request.UserChangeRequest;
 import ru.awp.enterprise.automation.models.response.UserResponse;
 
@@ -26,5 +27,8 @@ public interface UserApi {
 
     @DeleteMapping(value = "/{id}")
     Mono<ResponseEntity<HttpStatus>> deleteUser(@PathVariable(value = "id") UUID id);
+
+    @PostMapping(value = "/changepassword")
+    Mono<ResponseEntity<HttpStatus>> changePassword(@RequestBody @Validated UserChangePasswordRequest userChangePasswordRequest);
 
 }
