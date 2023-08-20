@@ -2,9 +2,9 @@ package ru.awp.enterprise.automation.exception;
 
 public class ProductAlreadyExist extends RuntimeException {
 
-    private static final String MESSAGE = "Продукт с id: \"%s\" уже существует";
+    private static final String MESSAGE = "Продукт с name: \"%s\" уже существует";
 
-    public ProductAlreadyExist(Long productId) {
-        super(String.format(MESSAGE, productId));
+    public ProductAlreadyExist(String name) {
+        super(String.format(MESSAGE, name));
     }
 }

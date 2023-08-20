@@ -13,6 +13,7 @@ import ru.awp.enterprise.automation.exception.ClientNotFoundException;
 import ru.awp.enterprise.automation.mapper.UserMapper;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
 import ru.awp.enterprise.automation.models.request.UserChangeRequest;
+import ru.awp.enterprise.automation.models.response.UserResponse;
 import ru.awp.enterprise.automation.service.UserService;
 
 import java.util.UUID;
@@ -36,7 +37,7 @@ public class UserController implements UserApi{
     }
 
     @Override
-    public Flux<UserDTO> getAllUser() {
+    public Flux<UserResponse> getAllUser() {
         return userService.findAll();
     }
 

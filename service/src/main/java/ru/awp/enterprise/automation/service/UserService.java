@@ -5,6 +5,7 @@ import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.models.dao.UserDAO;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
 import ru.awp.enterprise.automation.models.request.UserChangeRequest;
+import ru.awp.enterprise.automation.models.response.UserResponse;
 
 import java.util.UUID;
 
@@ -21,9 +22,9 @@ public interface UserService {
     /**
      * Получить всех работников
      *
-     * @return {@link Flux<UserDTO>} данные работников
+     * @return {@link Flux<UserResponse>} данные работников
      */
-    Flux<UserDTO> findAll();
+    Flux<UserResponse> findAll();
 
     Mono<UserDAO> findByPhone(String phoneNumber);
 

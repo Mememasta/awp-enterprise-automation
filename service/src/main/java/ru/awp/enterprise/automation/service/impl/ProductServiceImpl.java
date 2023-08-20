@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.exception.NotFoundProductException;
+import ru.awp.enterprise.automation.exception.ProductAlreadyExist;
 import ru.awp.enterprise.automation.mapper.ProductDAOMapper;
 import ru.awp.enterprise.automation.mapper.ProductMapper;
 import ru.awp.enterprise.automation.models.dto.ProductDTO;
@@ -37,8 +38,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Mono<Void> add(ProductRequest productRequest) {
-        return productRepository.save(productDaoMapper.apply(productRequest))
-                .flatMap(it -> Mono.empty());
+        var name = productRequest.name().trim();
+        return productRepository.findByNameIgnoreCase(name)
+                .flatMap(it -> Mono.error(new ProductAlreadyExist(name)))
+                .switchIfEmpty(productRepository.save(productDaoMapper.apply(productRequest)))
+                .ofType(Void.class);
     }
 
     @Override

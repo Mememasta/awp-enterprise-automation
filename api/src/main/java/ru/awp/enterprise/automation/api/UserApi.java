@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
 import ru.awp.enterprise.automation.models.request.UserChangeRequest;
+import ru.awp.enterprise.automation.models.response.UserResponse;
 
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public interface UserApi {
     Mono<UserDTO> getCurrentUser();
 
     @GetMapping(value = "/all")
-    Flux<UserDTO> getAllUser();
+    Flux<UserResponse> getAllUser();
 
     @PatchMapping(value = "/{id}")
     Mono<ResponseEntity<HttpStatus>> updateUser(@PathVariable(value = "id") UUID id, @RequestBody @Validated UserChangeRequest userChangeRequest);

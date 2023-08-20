@@ -8,9 +8,11 @@ import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.exception.ClientNotFoundException;
 import ru.awp.enterprise.automation.mapper.UserDAOMapper;
 import ru.awp.enterprise.automation.mapper.UserMapper;
+import ru.awp.enterprise.automation.mapper.UserResponseMapper;
 import ru.awp.enterprise.automation.models.dao.UserDAO;
 import ru.awp.enterprise.automation.models.dto.UserDTO;
 import ru.awp.enterprise.automation.models.request.UserChangeRequest;
+import ru.awp.enterprise.automation.models.response.UserResponse;
 import ru.awp.enterprise.automation.repository.UserRepository;
 import ru.awp.enterprise.automation.service.UserService;
 
@@ -22,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserResponseMapper userResponseMapper;
     private final UserDAOMapper userDAOMapper;
 
     @Override
@@ -37,9 +40,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Flux<UserDTO> findAll() {
+    public Flux<UserResponse> findAll() {
         return userRepository.findAll()
-                .map(userMapper)
+                .map(userResponseMapper)
                 .switchIfEmpty(Mono.empty());
     }
 
