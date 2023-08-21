@@ -10,22 +10,22 @@ import ru.awp.enterprise.automation.models.request.NoteRequest;
 
 import java.util.UUID;
 
-@RequestMapping(value = "/v1/api/note")
+@RequestMapping(value = "/api/v1/note")
 public interface NoteApi {
 
-    @GetMapping(value = "/")
-    Flux<NoteDTO> findNotesByAreaId(@RequestParam("area") @NotNull Integer areaId);
+    @GetMapping(value = "/area/{areaId}")
+    Flux<NoteDTO> findNotesByAreaId(@PathVariable("areaId") @NotNull Integer areaId);
+
+    @GetMapping(value = "/all")
+    Flux<NoteDTO> findAllNote();
 
     @GetMapping(value = "/{id}")
     Mono<NoteDTO> getNotesById(@PathVariable("id") @NotNull UUID uuid);
 
     @PutMapping(value = "/{id}")
-    Mono<NoteDTO> updateNote(@PathVariable("id") @NotNull UUID uuid, @RequestBody @Validated NoteRequest request);
-
-    @PutMapping(value = "/")
-    Flux<NoteDTO> updateAllNoteArea(@RequestParam("old_area") @NotNull String oldArea, @RequestParam("new_area") @NotNull String newArea);
+    Mono<Void> updateNote(@PathVariable("id") @NotNull UUID uuid, @RequestBody @Validated NoteRequest request);
 
     @PostMapping(value = "/add")
-    Mono<NoteDTO> add(@RequestBody @Validated NoteRequest request);
+    Mono<Void> add(@RequestBody @Validated NoteRequest request);
 
 }

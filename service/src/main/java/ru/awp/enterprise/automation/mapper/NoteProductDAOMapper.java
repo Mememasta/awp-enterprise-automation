@@ -12,7 +12,6 @@ public class NoteProductDAOMapper implements BiFunction<UUID, NoteProductDTO, No
     @Override
     public NoteProductDAO apply(UUID noteId, NoteProductDTO noteProductDTO) {
         return NoteProductDAO.builder()
-                .id(1l)
                 .noteId(noteId)
                 .productId(noteProductDTO.productId())
                 .value(noteProductDTO.value())

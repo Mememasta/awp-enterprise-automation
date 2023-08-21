@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                 .exceptionHandling()
                 .and()
                 .authorizeExchange(it -> it
+                        .pathMatchers("/").permitAll()
                         .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers("/metrics").permitAll()
                         .pathMatchers("/api/v1/authentication/auth").permitAll()

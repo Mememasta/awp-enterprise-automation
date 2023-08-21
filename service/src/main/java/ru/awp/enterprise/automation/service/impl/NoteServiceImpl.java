@@ -6,7 +6,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.mapper.NoteDAOMapper;
 import ru.awp.enterprise.automation.models.dao.NoteDAO;
-import ru.awp.enterprise.automation.models.dto.NoteDTO;
 import ru.awp.enterprise.automation.models.request.NoteRequest;
 import ru.awp.enterprise.automation.repository.NoteRepository;
 import ru.awp.enterprise.automation.service.NoteService;
@@ -20,28 +19,31 @@ class NoteServiceImpl implements NoteService {
     private final NoteRepository noteRepository;
     private final NoteDAOMapper noteDAOMapper;
 
+
     @Override
-    public Flux<NoteDTO> findByArea(String area) {
-        return null;
+    public Flux<NoteDAO> findByArea(Integer areaId) {
+        return noteRepository.findAllByArea(areaId);
     }
 
     @Override
-    public Mono<NoteDTO> findById(UUID uuid) {
-        return null;
+    public Mono<NoteDAO> findById(UUID uuid) {
+        return noteRepository.findById(uuid);
     }
 
     @Override
-    public Flux<NoteDTO> updateArea(String oldArea, String newArea) {
-        return null;
+    public Flux<NoteDAO> findAll() {
+        return noteRepository.findAll();
     }
 
     @Override
-    public Mono<NoteDTO> updateNote(UUID uuid, NoteDTO noteDTO) {
-        return null;
+    public Mono<NoteDAO> updateNote(UUID uuid, NoteRequest noteRequest) {
+        return this.findById(uuid)
+                .map(note -> noteDAOMapper.apply(uuid, noteRequest))
+                .flatMap(noteRepository::save);
     }
 
     @Override
-    public Mono<NoteDAO> save(NoteRequest request) {
+    public Mono<NoteDAO> saveNote(NoteRequest request) {
         return noteRepository.save(noteDAOMapper.apply(request));
     }
 }

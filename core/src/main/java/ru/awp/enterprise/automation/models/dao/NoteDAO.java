@@ -25,7 +25,7 @@ public record NoteDAO(
     @Column(value = "updated")
     OffsetDateTime updated,
     @Column(value = "area")
-    String area,
+    Integer area,
     @Column(value = "status")
     Integer status,
     @Column(value = "comment")

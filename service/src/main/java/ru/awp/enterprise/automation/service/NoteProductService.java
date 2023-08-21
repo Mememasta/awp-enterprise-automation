@@ -1,13 +1,16 @@
 package ru.awp.enterprise.automation.service;
 
 import reactor.core.publisher.Flux;
-import ru.awp.enterprise.automation.models.dao.NoteDAO;
+import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.models.dto.NoteProductDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface NoteProductService {
 
-    Flux<NoteProductDTO> save(NoteDAO noteDAO, List<NoteProductDTO> productDTO);
+    Mono<Void> save(UUID uuid, List<NoteProductDTO> productDTO);
+
+    Flux<NoteProductDTO> findNoteProducts(UUID uuid);
 
 }

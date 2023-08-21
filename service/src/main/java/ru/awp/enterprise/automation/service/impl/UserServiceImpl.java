@@ -16,6 +16,7 @@ import ru.awp.enterprise.automation.models.response.UserResponse;
 import ru.awp.enterprise.automation.repository.UserRepository;
 import ru.awp.enterprise.automation.service.UserService;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -31,12 +32,18 @@ public class UserServiceImpl implements UserService {
     public Mono<UserDTO> findById(String id) {
         try {
             var uuid = UUID.fromString(id);
-            return userRepository.findById(uuid)
-                    .map(userMapper)
-                    .switchIfEmpty(Mono.empty());
+            return findById(uuid).map(userMapper);
         } catch (IllegalArgumentException e) {
             return Mono.error(new RuntimeException(e.getMessage(), e));
         }
+    }
+
+    public Mono<UserDAO> findById(UUID uuid) {
+        if (Objects.isNull(uuid)) {
+            return Mono.empty();
+        }
+        return userRepository.findById(uuid)
+                .switchIfEmpty(Mono.empty());
     }
 
     @Override

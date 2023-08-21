@@ -2,6 +2,7 @@ package ru.awp.enterprise.automation.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
+import ru.awp.enterprise.automation.models.response.NoteUserResponse;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -18,13 +19,13 @@ public record NoteDTO(
           Рабочий ответственный за продукт
          */
         @JsonProperty(value = "user")
-        UserDTO userDTO,
+        NoteUserResponse userDTO,
 
         /*
           Пользователь изменивший запись
          */
         @JsonProperty(value = "user_edit")
-        UserDTO userEdit,
+        NoteUserResponse userEdit,
 
         /*
           Дата и время учета продукта
@@ -42,7 +43,7 @@ public record NoteDTO(
           Производство на котором находится продукт
          */
         @JsonProperty(value = "area")
-        String area,
+        Integer area,
 
         /*
           Состояние продукции (Произведено/Отгружено)

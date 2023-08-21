@@ -15,13 +15,13 @@ public record NoteRequest(
           Рабочий ответственный за продукт
          */
         @NotNull
-        @JsonProperty(value = "user")
+        @JsonProperty(value = "user_id")
         UUID userId,
 
         /*
           Пользователь изменивший запись
          */
-        @JsonProperty(value = "user_edit")
+        @JsonProperty(value = "user_id_edit")
         UUID userEditId,
 
         /*
@@ -29,7 +29,7 @@ public record NoteRequest(
          */
         @NotNull
         @JsonProperty(value = "area")
-        String area,
+        Integer area,
 
         /*
           Состояние продукции (Произведено/Отгружено)

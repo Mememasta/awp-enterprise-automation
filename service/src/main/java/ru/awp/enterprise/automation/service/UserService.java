@@ -20,6 +20,14 @@ public interface UserService {
     Mono<UserDTO> findById(String uuid);
 
     /**
+     * Получить работника по id
+     *
+     * @param uuid {@link UUID} идентификатор работника
+     * @return {@link Mono<UserDTO>} данные работника
+     */
+    Mono<UserDAO> findById(UUID uuid);
+
+    /**
      * Получить всех работников
      *
      * @return {@link Flux<UserResponse>} данные работников
