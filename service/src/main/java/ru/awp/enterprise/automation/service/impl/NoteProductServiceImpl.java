@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.exception.NoteNotFoundException;
+import ru.awp.enterprise.automation.exception.NoteProductNotFoundException;
+import ru.awp.enterprise.automation.exception.ProductDeleteException;
 import ru.awp.enterprise.automation.mapper.NoteProductDAOMapper;
+import ru.awp.enterprise.automation.models.dao.NoteProductDAO;
 import ru.awp.enterprise.automation.models.dto.NoteProductDTO;
 import ru.awp.enterprise.automation.repository.NoteProductRepository;
 import ru.awp.enterprise.automation.service.NoteProductService;
@@ -21,6 +24,7 @@ public class NoteProductServiceImpl implements NoteProductService {
     private final NoteProductRepository noteProductRepository;
     private final NoteProductDAOMapper noteProductDAOMapper;
 
+    @Override
     public Mono<Void> save(UUID uuid, List<NoteProductDTO> productDTO) {
         if (Objects.isNull(uuid)) {
             throw new NoteNotFoundException();
@@ -32,9 +36,35 @@ public class NoteProductServiceImpl implements NoteProductService {
     }
 
     @Override
+    public Mono<Void> update(UUID uuid, List<NoteProductDTO> productDTO) {
+        if (Objects.isNull(uuid)) {
+            throw new NoteNotFoundException();
+        }
+        return Flux.fromIterable(productDTO)
+                .flatMap(product -> buildNoteProduct(uuid, product))
+                .flatMap(noteProductRepository::save)
+                .then(Mono.empty());
+    }
+
+    private Mono<NoteProductDAO> buildNoteProduct(UUID uuid, NoteProductDTO noteProductDTO) {
+        if (Objects.isNull(noteProductDTO.id())) {
+            return Mono.just(noteProductDAOMapper.apply(uuid, noteProductDTO));
+        }
+        return noteProductRepository.findById(noteProductDTO.id())
+                .switchIfEmpty(Mono.error(new NoteProductNotFoundException()));
+    }
+
+    @Override
     public Flux<NoteProductDTO> findNoteProducts(UUID uuid) {
         return noteProductRepository.findAllByNoteId(uuid)
                 .map(noteProductDAOMapper::apply);
+    }
+
+    @Override
+    public Mono<Void> deleteNoteProduct(Long noteProductId) {
+        return noteProductRepository.findById(noteProductId)
+                .switchIfEmpty(Mono.error(ProductDeleteException::new))
+                .flatMap(noteProductRepository::delete);
     }
 
 }

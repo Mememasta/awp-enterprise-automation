@@ -13,6 +13,8 @@ public interface NoteProductFacadeService {
 
     Flux<NoteDTO> findAll();
 
+    Flux<NoteDTO> findNoteByUserId(UUID uuid);
+
     Mono<NoteDTO> findById(UUID noteId);
 
     Mono<Void> validateAndSaveNoteAndProduct(NoteRequest noteRequest);

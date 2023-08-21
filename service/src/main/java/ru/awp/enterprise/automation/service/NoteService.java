@@ -11,6 +11,8 @@ public interface NoteService {
 
     Flux<NoteDAO> findByArea(Integer areaId);
 
+    Flux<NoteDAO> findByUserId(UUID userId);
+
     Mono<NoteDAO> findById(UUID uuid);
 
     Flux<NoteDAO> findAll();

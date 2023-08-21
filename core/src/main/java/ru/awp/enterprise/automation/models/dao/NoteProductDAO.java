@@ -7,6 +7,7 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Builder
@@ -35,6 +36,6 @@ public record NoteProductDAO(
         @Override
         @Transient
         public boolean isNew() {
-                return true;
+                return Objects.isNull(this.id);
         }
 }

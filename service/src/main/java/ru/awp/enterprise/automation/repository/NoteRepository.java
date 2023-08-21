@@ -11,5 +11,6 @@ import java.util.UUID;
 public interface NoteRepository extends ReactiveCrudRepository<NoteDAO, UUID> {
 
     Flux<NoteDAO> findAllByArea(Integer areaId);
+    Flux<NoteDAO> findAllByUser(UUID userId);
 
 }

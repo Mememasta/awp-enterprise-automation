@@ -26,6 +26,11 @@ class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public Flux<NoteDAO> findByUserId(UUID userId) {
+        return noteRepository.findAllByUser(userId);
+    }
+
+    @Override
     public Mono<NoteDAO> findById(UUID uuid) {
         return noteRepository.findById(uuid);
     }
@@ -38,7 +43,7 @@ class NoteServiceImpl implements NoteService {
     @Override
     public Mono<NoteDAO> updateNote(UUID uuid, NoteRequest noteRequest) {
         return this.findById(uuid)
-                .map(note -> noteDAOMapper.apply(uuid, noteRequest))
+                .map(note -> noteDAOMapper.apply(note, noteRequest))
                 .flatMap(noteRepository::save);
     }
 

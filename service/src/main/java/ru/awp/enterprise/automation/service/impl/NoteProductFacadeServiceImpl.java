@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.exception.ClientNotFoundException;
-import ru.awp.enterprise.automation.exception.ProductNotFoundException;
+import ru.awp.enterprise.automation.exception.NotFoundProductException;
 import ru.awp.enterprise.automation.mapper.NoteDTOMapper;
 import ru.awp.enterprise.automation.mapper.NoteUserResponseMapper;
 import ru.awp.enterprise.automation.models.dao.NoteDAO;
@@ -16,6 +16,7 @@ import ru.awp.enterprise.automation.models.request.NoteRequest;
 import ru.awp.enterprise.automation.service.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -34,7 +35,6 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     public Flux<NoteDTO> findNoteAndProduct(Integer areaId) {
         return noteService.findByArea(areaId)
                 .flatMap(this::buildNoteToDTO);
-
     }
 
     @Override
@@ -44,9 +44,16 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     }
 
     @Override
+    public Flux<NoteDTO> findNoteByUserId(UUID uuid) {
+        return noteService.findByUserId(uuid)
+                .flatMap(this::buildNoteToDTO);
+    }
+
+    @Override
     public Mono<NoteDTO> findById(UUID noteId) {
         return noteService.findById(noteId)
-                .flatMap(this::buildNoteToDTO);    }
+                .flatMap(this::buildNoteToDTO);
+    }
 
     private Mono<NoteDTO> buildNoteToDTO(NoteDAO note) {
         var noteProductsMono = noteProductService.findNoteProducts(note.id())
@@ -71,12 +78,14 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     }
 
     @Override
+    @Transactional
     public Mono<Void> validateAndUpdateNoteAndProduct(UUID noteId, NoteRequest noteRequest) {
         return validateUsers(noteRequest.userId())
                 .then(validateUsers(noteRequest.userEditId()))
-                .then(validateProducts(noteRequest.products()))
+                .then(deletedNoteProducts(noteRequest.deletedProductsId()))
                 .then(updateNoteAndReturnUUID(noteId, noteRequest))
-                .flatMap(uuid -> noteProductService.save(uuid, noteRequest.products()));
+                .flatMap(uuid -> noteProductService.update(uuid, noteRequest.products()))
+                .then();
     }
 
     private Mono<Void> validateUsers(UUID userId) {
@@ -90,7 +99,17 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
         // Проверить наличие всех продуктов в сервисе productService
         return Flux.fromIterable(products)
                 .flatMap(p -> productService.getProductById(p.productId())
-                        .switchIfEmpty(Mono.error(new ProductNotFoundException())))
+                        .switchIfEmpty(Mono.error(new NotFoundProductException())))
+                .then();
+    }
+
+    private Mono<Void> deletedNoteProducts(List<Long> productIds) {
+        // Проверить наличие всех продуктов и удалить их
+        if (Objects.isNull(productIds) || productIds.isEmpty()) {
+            return Mono.empty();
+        }
+        return Flux.fromIterable(productIds)
+                .flatMap(noteProductService::deleteNoteProduct)
                 .then();
     }
 
@@ -102,6 +121,9 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
 
     private Mono<UUID> updateNoteAndReturnUUID(UUID noteId, NoteRequest noteRequest) {
         // Обновить заметку и вернуть ее UUID
+        if (Objects.isNull(noteRequest.products()) || noteRequest.products().isEmpty()) {
+            return Mono.empty();
+        }
         return noteService.updateNote(noteId, noteRequest)
                 .map(NoteDAO::id);
     }

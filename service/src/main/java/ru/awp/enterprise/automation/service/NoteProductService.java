@@ -11,6 +11,10 @@ public interface NoteProductService {
 
     Mono<Void> save(UUID uuid, List<NoteProductDTO> productDTO);
 
+    Mono<Void> update(UUID uuid, List<NoteProductDTO> productDTO);
+
     Flux<NoteProductDTO> findNoteProducts(UUID uuid);
+
+    Mono<Void> deleteNoteProduct(Long noteProductId);
 
 }

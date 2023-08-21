@@ -61,7 +61,7 @@ databaseChangeLog:
                   name: comment
                   type: varchar(512)
                   constraints:
-                    nullable: false
+                    nullable: true
   - changeSet:
         id: 20230514-create-products-table
         author: MChuchalov

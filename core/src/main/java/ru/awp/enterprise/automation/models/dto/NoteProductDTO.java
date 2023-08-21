@@ -6,6 +6,8 @@ import lombok.Builder;
 @Builder
 public record NoteProductDTO(
 
+        Long id,
+
         /*
           Продукт
          */

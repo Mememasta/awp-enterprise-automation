@@ -11,5 +11,6 @@ import java.util.UUID;
 public interface NoteProductRepository extends ReactiveCrudRepository<NoteProductDAO, Long> {
 
     Flux<NoteProductDAO> findAllByNoteId(UUID noteId);
+    Flux<NoteProductDAO> findAllByNoteIdAndProductId(UUID noteId, Long productId);
 
 }

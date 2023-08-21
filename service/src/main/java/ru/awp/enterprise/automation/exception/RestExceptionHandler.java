@@ -34,6 +34,12 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ProductDeleteException.class)
+    ResponseEntity<Object> productAlreadyExist(ProductDeleteException exception) {
+        var error = getApiError(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     private static ApiError getApiError(HttpStatus unauthorized, String exception) {
         return ApiError.builder()
                 .timestamp(LocalDateTime.now())

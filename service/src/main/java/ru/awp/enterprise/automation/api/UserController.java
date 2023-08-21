@@ -16,6 +16,7 @@ import ru.awp.enterprise.automation.models.dto.UserDTO;
 import ru.awp.enterprise.automation.models.request.UserChangePasswordRequest;
 import ru.awp.enterprise.automation.models.request.UserChangeRequest;
 import ru.awp.enterprise.automation.models.response.UserResponse;
+import ru.awp.enterprise.automation.service.NoteProductFacadeService;
 import ru.awp.enterprise.automation.service.UserService;
 
 import java.util.UUID;
@@ -23,19 +24,23 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class UserController implements UserApi{
+public class UserController implements UserApi {
 
     private final UserService userService;
+    private final NoteProductFacadeService noteProductFacadeService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public Mono<UserDTO> getCurrentUser() {
-        return ReactiveSecurityContextHolder.getContext()
+        var user = ReactiveSecurityContextHolder.getContext()
                 .map(SecurityContext::getAuthentication)
                 .flatMap(authentication -> userService.findByPhone(authentication.getPrincipal().toString()))
-                .map(userMapper)
                 .switchIfEmpty(Mono.error(ClientNotFoundException::new));
+        var note = user.flatMap(it -> noteProductFacadeService.findNoteByUserId(it.id()).collectList());
+
+        return Mono.zip(user, note)
+                .map(tuple -> userMapper.apply(tuple.getT1(), tuple.getT2()));
 
     }
 

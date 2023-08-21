@@ -1,7 +1,6 @@
 package ru.awp.enterprise.automation.models.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import ru.awp.enterprise.automation.models.dto.NoteProductDTO;
 
@@ -41,7 +40,6 @@ public record NoteRequest(
         /*
           Комментарий к записи
          */
-        @NotBlank
         @JsonProperty(value = "comment")
         String comment,
 
@@ -49,6 +47,12 @@ public record NoteRequest(
           Список продуктов
          */
         @JsonProperty(value = "products")
-        List<NoteProductDTO> products
+        List<NoteProductDTO> products,
+
+        /*
+          Список продуктов на удаление
+         */
+        @JsonProperty(value = "deleted_products")
+        List<Long> deletedProductsId
 ) {
 }
