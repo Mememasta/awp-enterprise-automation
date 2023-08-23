@@ -22,7 +22,7 @@ public interface NoteApi {
     @GetMapping(value = "/{id}")
     Mono<NoteDTO> getNotesById(@PathVariable("id") @NotNull UUID uuid);
 
-    @GetMapping(value = "/{user_id}")
+    @GetMapping(value = "/user/{user_id}")
     Flux<NoteDTO> getNotesByUserId(@PathVariable("user_id") @NotNull UUID userId);
 
     @PutMapping(value = "/{id}")
