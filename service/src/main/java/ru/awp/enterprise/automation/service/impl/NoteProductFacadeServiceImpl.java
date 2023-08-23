@@ -121,9 +121,6 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
 
     private Mono<UUID> updateNoteAndReturnUUID(UUID noteId, NoteRequest noteRequest) {
         // Обновить заметку и вернуть ее UUID
-        if (Objects.isNull(noteRequest.products()) || noteRequest.products().isEmpty()) {
-            return Mono.empty();
-        }
         return noteService.updateNote(noteId, noteRequest)
                 .map(NoteDAO::id);
     }

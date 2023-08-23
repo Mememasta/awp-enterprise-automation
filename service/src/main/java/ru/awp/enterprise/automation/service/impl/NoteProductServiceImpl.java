@@ -40,6 +40,9 @@ public class NoteProductServiceImpl implements NoteProductService {
         if (Objects.isNull(uuid)) {
             throw new NoteNotFoundException();
         }
+        if (Objects.isNull(productDTO) || productDTO.isEmpty()) {
+            return Mono.empty();
+        }
         return Flux.fromIterable(productDTO)
                 .flatMap(product -> buildNoteProduct(uuid, product))
                 .flatMap(noteProductRepository::save)

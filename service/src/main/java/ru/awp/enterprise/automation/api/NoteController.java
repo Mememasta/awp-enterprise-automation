@@ -34,6 +34,11 @@ public class NoteController implements NoteApi {
     }
 
     @Override
+    public Flux<NoteDTO> getNotesByUserId(UUID userId) {
+        return noteProductFacadeService.findNoteByUserId(userId);
+    }
+
+    @Override
     public Mono<Void> updateNote(UUID uuid, NoteRequest request) {
         return noteProductFacadeService.validateAndUpdateNoteAndProduct(uuid, request);
     }
