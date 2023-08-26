@@ -14,6 +14,8 @@ import ru.awp.enterprise.automation.models.request.ProductRequest;
 import ru.awp.enterprise.automation.repository.ProductRepository;
 import ru.awp.enterprise.automation.service.ProductService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -33,6 +35,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId)
                 .map(productMapper)
                 .switchIfEmpty(Mono.error(NotFoundProductException::new));
+    }
+
+    @Override
+    public Mono<Double> getProductsVolume(List<Long> productIds) {
+        return productRepository.getSumVolume(productIds);
     }
 
     @Override

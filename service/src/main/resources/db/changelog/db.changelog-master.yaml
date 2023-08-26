@@ -115,3 +115,37 @@ databaseChangeLog:
               - column:
                   name: is_defect
                   type: boolean
+  - changeSet:
+      id: 20230826-update-tables
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - modifyDataType:
+            schema: awp_enterprise_automation
+            tableName: notes
+            columnName: created
+            newDataType: date
+        - addColumn:
+            schema: awp_enterprise_automation
+            tableName: products
+            columns:
+              - column:
+                  name: concrete_volume
+                  type: double
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            schema: awp_enterprise_automation
+            baseTableName: notes_products
+            baseColumnNames: note_id
+            referencedTableName: notes
+            referencedColumnNames: id
+            constraintName: fk_notes_id
+        - addForeignKeyConstraint:
+            schema: awp_enterprise_automation
+            baseTableName: notes_products
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: product_id
+            constraintName: fk_product_id

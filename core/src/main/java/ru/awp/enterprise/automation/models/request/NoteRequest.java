@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import ru.awp.enterprise.automation.models.dto.NoteProductDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,13 @@ public record NoteRequest(
          */
         @JsonProperty(value = "user_id_edit")
         UUID userEditId,
+
+        /*
+          Дата и время учета продукта
+         */
+        @NotNull
+        @JsonProperty(value = "created")
+        LocalDate created,
 
         /*
           Производство на котором находится продукт

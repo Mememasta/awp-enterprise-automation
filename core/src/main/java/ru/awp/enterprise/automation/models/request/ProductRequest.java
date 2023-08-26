@@ -12,6 +12,10 @@ public record ProductRequest(
 
         @NotNull
         @JsonProperty(value = "is_available")
-        Boolean isAvailable
+        Boolean isAvailable,
+
+        @NotNull
+        @JsonProperty(value = "concrete_volume")
+        Double concreteVolume
 ) {
 }

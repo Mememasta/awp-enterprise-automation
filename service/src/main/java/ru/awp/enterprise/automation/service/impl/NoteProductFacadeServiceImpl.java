@@ -63,9 +63,16 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
         var editUserMono = userService.findById(note.user_edit())
                 .map(noteUserResponseMapper)
                 .switchIfEmpty(Mono.just(noteUserResponseMapper.apply(null)));
+        var productsVolume = noteProductsMono
+                .map(products -> products.stream()
+                        .map(NoteProductDTO::productId)
+                        .toList())
+                .filter(ids -> !ids.isEmpty())
+                .flatMap(productService::getProductsVolume)
+                .switchIfEmpty(Mono.just(0.0));
 
-        return Mono.zip(Mono.just(note), noteProductsMono, userMono, editUserMono)
-                .map(tuple -> noteDTOMapper.map(tuple.getT1(), tuple.getT2(), tuple.getT3(), tuple.getT4()));
+        return Mono.zip(Mono.just(note), noteProductsMono, userMono, editUserMono, productsVolume)
+                .map(tuple -> noteDTOMapper.map(tuple.getT1(), tuple.getT2(), tuple.getT3(), tuple.getT4(), tuple.getT5()));
     }
 
     @Override
@@ -98,7 +105,7 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     private Mono<Void> validateProducts(List<NoteProductDTO> products) {
         // Проверить наличие всех продуктов в сервисе productService
         return Flux.fromIterable(products)
-                .flatMap(p -> productService.getProductById(p.productId())
+                .flatMap(product -> productService.getProductById(product.productId())
                         .switchIfEmpty(Mono.error(new NotFoundProductException())))
                 .then();
     }

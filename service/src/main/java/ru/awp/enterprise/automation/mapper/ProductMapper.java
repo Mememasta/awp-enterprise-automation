@@ -14,6 +14,7 @@ public class ProductMapper implements Function<ProductDAO, ProductDTO> {
                 .productId(productDAO.productId())
                 .name(productDAO.name())
                 .isAvailable(productDAO.isAvailable())
+                .concreteVolume(productDAO.concreteVolume())
                 .build();
     }
 }

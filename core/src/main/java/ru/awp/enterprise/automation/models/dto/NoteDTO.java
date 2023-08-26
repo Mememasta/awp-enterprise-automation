@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import ru.awp.enterprise.automation.models.response.NoteUserResponse;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public record NoteDTO(
           Дата и время учета продукта
          */
         @JsonProperty(value = "created")
-        OffsetDateTime created,
+        LocalDate created,
 
         /*
           Дата изменения записи
@@ -56,6 +57,12 @@ public record NoteDTO(
          */
         @JsonProperty(value = "comment")
         String comment,
+
+        /*
+           Общий объем бетона
+         */
+        @JsonProperty(value = "sum_concrete_volume")
+        Double sumConcreteVolume,
 
         /*
           Список продуктов

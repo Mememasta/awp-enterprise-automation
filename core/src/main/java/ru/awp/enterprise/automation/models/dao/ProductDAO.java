@@ -18,7 +18,9 @@ public record ProductDAO(
         @Column(value = "name")
         String name,
         @Column(value = "is_available")
-        boolean isAvailable
+        boolean isAvailable,
+        @Column(value = "concrete_volume")
+        double concreteVolume
 
 )  implements Persistable<Long> {
         @Override

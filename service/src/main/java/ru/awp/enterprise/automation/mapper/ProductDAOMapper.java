@@ -14,6 +14,7 @@ public class ProductDAOMapper implements Function<ProductRequest, ProductDAO> {
         return ProductDAO.builder()
                 .name(request.name())
                 .isAvailable(request.isAvailable())
+                .concreteVolume(request.concreteVolume())
                 .build();
     }
 
@@ -22,6 +23,7 @@ public class ProductDAOMapper implements Function<ProductRequest, ProductDAO> {
                 .productId(id)
                 .name(request.name())
                 .isAvailable(request.isAvailable())
+                .concreteVolume(request.concreteVolume())
                 .build();
     }
 

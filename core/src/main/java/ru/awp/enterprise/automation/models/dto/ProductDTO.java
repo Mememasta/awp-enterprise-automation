@@ -10,6 +10,8 @@ public record ProductDTO(
         @JsonProperty(value = "name")
         String name,
         @JsonProperty(value = "is_available")
-        boolean isAvailable
+        boolean isAvailable,
+        @JsonProperty(value = "concrete_volume")
+        double concreteVolume
 ) {
 }

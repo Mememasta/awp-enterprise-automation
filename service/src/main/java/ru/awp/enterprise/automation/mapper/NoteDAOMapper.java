@@ -13,7 +13,7 @@ public class NoteDAOMapper implements Function<NoteRequest, NoteDAO> {
     @Override
     public NoteDAO apply(NoteRequest request) {
         return NoteDAO.builder()
-                .created(OffsetDateTime.now())
+                .created(request.created())
                 .updated(OffsetDateTime.now())
                 .comment(request.comment())
                 .status(request.status())
@@ -25,7 +25,7 @@ public class NoteDAOMapper implements Function<NoteRequest, NoteDAO> {
     public NoteDAO apply(NoteDAO note, NoteRequest request) {
         return NoteDAO.builder()
                 .id(note.id())
-                .created(note.created())
+                .created(request.created())
                 .updated(OffsetDateTime.now())
                 .comment(request.comment())
                 .status(request.status())

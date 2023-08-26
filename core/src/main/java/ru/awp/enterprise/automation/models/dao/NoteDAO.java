@@ -7,6 +7,7 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public record NoteDAO(
     @Column(value = "user_edit_id")
     UUID user_edit,
     @Column(value = "created")
-    OffsetDateTime created,
+    LocalDate created,
     @Column(value = "updated")
     OffsetDateTime updated,
     @Column(value = "area")
