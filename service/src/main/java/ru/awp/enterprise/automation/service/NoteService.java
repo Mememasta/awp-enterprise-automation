@@ -17,8 +17,8 @@ public interface NoteService {
 
     Flux<NoteDAO> findAll();
 
-    Mono<NoteDAO> updateNote(UUID uuid, NoteRequest noteRequest);
+    Mono<NoteDAO> updateNote(UUID uuid, NoteRequest noteRequest, Double productsVolume);
 
-    Mono<NoteDAO> saveNote(NoteRequest request);
+    Mono<NoteDAO> saveNote(NoteRequest request, Double productsVolume);
 
 }

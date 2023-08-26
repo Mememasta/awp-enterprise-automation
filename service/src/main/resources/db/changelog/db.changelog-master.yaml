@@ -135,6 +135,16 @@ databaseChangeLog:
                   defaultValue: 0
                   constraints:
                     nullable: false
+        - addColumn:
+            schema: awp_enterprise_automation
+            tableName: notes
+            columns:
+              - column:
+                  name: sum_concrete_volume
+                  type: double
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
         - addForeignKeyConstraint:
             schema: awp_enterprise_automation
             baseTableName: notes_products

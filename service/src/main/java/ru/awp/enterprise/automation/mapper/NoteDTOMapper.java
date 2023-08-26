@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class NoteDTOMapper {
 
-    public NoteDTO map(NoteDAO noteDAO, List<NoteProductDTO> noteProductDTOS, NoteUserResponse userDTO, NoteUserResponse userEditDTO, Double productsVolume) {
+    public NoteDTO map(NoteDAO noteDAO, List<NoteProductDTO> noteProductDTOS, NoteUserResponse userDTO, NoteUserResponse userEditDTO) {
         return NoteDTO.builder()
                 .id(noteDAO.id())
                 .status(noteDAO.status())
@@ -22,12 +22,12 @@ public class NoteDTOMapper {
                 .userDTO(userDTO)
                 .userEdit(userEditDTO)
                 .products(noteProductDTOS)
-                .sumConcreteVolume(productsVolume)
+                .sumConcreteVolume(noteDAO.sumConcreteVolume())
                 .build();
     }
 
     public NoteDTO map(NoteDAO noteDAO, List<NoteProductDTO> noteProductDTOS) {
-        return map(noteDAO, noteProductDTOS, null, null, null);
+        return map(noteDAO, noteProductDTOS, null, null);
     }
 
 }

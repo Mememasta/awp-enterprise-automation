@@ -5,13 +5,13 @@ import ru.awp.enterprise.automation.models.dao.NoteDAO;
 import ru.awp.enterprise.automation.models.request.NoteRequest;
 
 import java.time.OffsetDateTime;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 @Component
-public class NoteDAOMapper implements Function<NoteRequest, NoteDAO> {
+public class NoteDAOMapper implements BiFunction<NoteRequest, Double, NoteDAO> {
 
     @Override
-    public NoteDAO apply(NoteRequest request) {
+    public NoteDAO apply(NoteRequest request, Double productsVolume) {
         return NoteDAO.builder()
                 .created(request.created())
                 .updated(OffsetDateTime.now())
@@ -19,10 +19,11 @@ public class NoteDAOMapper implements Function<NoteRequest, NoteDAO> {
                 .status(request.status())
                 .user(request.userId())
                 .area(request.area())
+                .sumConcreteVolume(productsVolume)
                 .build();
     }
 
-    public NoteDAO apply(NoteDAO note, NoteRequest request) {
+    public NoteDAO apply(NoteDAO note, NoteRequest request, Double productsVolume) {
         return NoteDAO.builder()
                 .id(note.id())
                 .created(request.created())
@@ -30,8 +31,9 @@ public class NoteDAOMapper implements Function<NoteRequest, NoteDAO> {
                 .comment(request.comment())
                 .status(request.status())
                 .user(note.user())
-                .user_edit(request.userEditId())
+                .userEdit(request.userEditId())
                 .area(request.area())
+                .sumConcreteVolume(productsVolume)
                 .build();
     }
 }

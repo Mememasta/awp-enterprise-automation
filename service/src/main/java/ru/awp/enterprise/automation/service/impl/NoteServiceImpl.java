@@ -41,14 +41,14 @@ class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Mono<NoteDAO> updateNote(UUID uuid, NoteRequest noteRequest) {
+    public Mono<NoteDAO> updateNote(UUID uuid, NoteRequest noteRequest, Double productsVolume) {
         return this.findById(uuid)
-                .map(note -> noteDAOMapper.apply(note, noteRequest))
+                .map(note -> noteDAOMapper.apply(note, noteRequest, productsVolume))
                 .flatMap(noteRepository::save);
     }
 
     @Override
-    public Mono<NoteDAO> saveNote(NoteRequest request) {
-        return noteRepository.save(noteDAOMapper.apply(request));
+    public Mono<NoteDAO> saveNote(NoteRequest request, Double productsVolume) {
+        return noteRepository.save(noteDAOMapper.apply(request, productsVolume));
     }
 }

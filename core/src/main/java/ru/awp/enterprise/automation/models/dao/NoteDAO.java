@@ -20,7 +20,7 @@ public record NoteDAO(
     @Column(value = "user_id")
     UUID user,
     @Column(value = "user_edit_id")
-    UUID user_edit,
+    UUID userEdit,
     @Column(value = "created")
     LocalDate created,
     @Column(value = "updated")
@@ -30,7 +30,9 @@ public record NoteDAO(
     @Column(value = "status")
     Integer status,
     @Column(value = "comment")
-    String comment
+    String comment,
+    @Column(value = "sum_concrete_volume")
+    Double sumConcreteVolume
 ) implements Persistable<UUID> {
 
     @Override
