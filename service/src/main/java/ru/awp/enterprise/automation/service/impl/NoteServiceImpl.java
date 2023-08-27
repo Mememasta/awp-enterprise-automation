@@ -23,12 +23,12 @@ class NoteServiceImpl implements NoteService {
 
     @Override
     public Flux<NoteDAO> findByArea(Integer areaId) {
-        return noteRepository.findAllByArea(areaId, Sort.by("id"));
+        return noteRepository.findAllByArea(areaId, Sort.by("created"));
     }
 
     @Override
     public Flux<NoteDAO> findByUserId(UUID userId) {
-        return noteRepository.findAllByUser(userId, Sort.by("id"));
+        return noteRepository.findAllByUser(userId, Sort.by("created"));
     }
 
     @Override
@@ -38,7 +38,7 @@ class NoteServiceImpl implements NoteService {
 
     @Override
     public Flux<NoteDAO> findAll() {
-        return noteRepository.findAll(Sort.by("id"));
+        return noteRepository.findAll(Sort.by("created"));
     }
 
     @Override
