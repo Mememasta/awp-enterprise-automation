@@ -15,6 +15,7 @@ import ru.awp.enterprise.automation.repository.ProductRepository;
 import ru.awp.enterprise.automation.service.ProductService;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +56,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Mono<Void> updateProduct(Long id, ProductRequest productRequest) {
-        return getProductById(id)
+        var name = productRequest.name().trim();
+        return productRepository.findByNameIgnoreCase(name)
+                .filter(product -> !Objects.equals(product.productId(), id))
+                .flatMap(it -> Mono.error(new ProductAlreadyExist(name)))
+                .then(getProductById(id))
                 .switchIfEmpty(Mono.error(NotFoundProductException::new))
                 .flatMap(product -> productRepository.save(productDaoMapper.apply(id, productRequest)))
                 .flatMap(it -> Mono.empty());

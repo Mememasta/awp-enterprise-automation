@@ -107,8 +107,8 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
 
     private Mono<Double> validateProductsForUpdateNote(List<NoteProductDTO> products) {
         // Проверить наличие всех продуктов в сервисе productService
-        if (products.isEmpty()) {
-            return Mono.empty();
+        if (Objects.isNull(products) || products.isEmpty()) {
+            return Mono.just(0.0);
         }
         return Flux.fromIterable(products)
                 .flatMap(product -> productService.getProductById(product.productId())
