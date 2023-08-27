@@ -1,6 +1,7 @@
 package ru.awp.enterprise.automation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,12 +23,12 @@ class NoteServiceImpl implements NoteService {
 
     @Override
     public Flux<NoteDAO> findByArea(Integer areaId) {
-        return noteRepository.findAllByArea(areaId);
+        return noteRepository.findAllByArea(areaId, Sort.by("id"));
     }
 
     @Override
     public Flux<NoteDAO> findByUserId(UUID userId) {
-        return noteRepository.findAllByUser(userId);
+        return noteRepository.findAllByUser(userId, Sort.by("id"));
     }
 
     @Override
@@ -37,7 +38,7 @@ class NoteServiceImpl implements NoteService {
 
     @Override
     public Flux<NoteDAO> findAll() {
-        return noteRepository.findAll();
+        return noteRepository.findAll(Sort.by("id"));
     }
 
     @Override

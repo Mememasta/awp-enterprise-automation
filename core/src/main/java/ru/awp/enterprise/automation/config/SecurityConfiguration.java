@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                         .pathMatchers("/metrics").permitAll()
                         .pathMatchers("/api/v1/authentication/auth").permitAll()
                         .pathMatchers("/api/v1/user/me").hasRole("USER")
+                        .pathMatchers("/api/v1/user/all").hasRole("USER")
                         .pathMatchers("/api/v1/user/*").hasRole("ADMIN")
                         .pathMatchers("/api/v1/authentication/signup").hasRole("ADMIN")
                         .pathMatchers("/**").hasRole("USER")

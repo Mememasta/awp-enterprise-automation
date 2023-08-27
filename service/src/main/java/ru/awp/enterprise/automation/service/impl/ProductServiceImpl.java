@@ -1,6 +1,7 @@
 package ru.awp.enterprise.automation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -27,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Flux<ProductDTO> getAllProducts() {
-        return productRepository.findAll()
+        return productRepository.findAll(Sort.by("product_id"))
                 .map(productMapper);
     }
 
