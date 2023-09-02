@@ -53,7 +53,6 @@ public record ReportCardDTO(
     @JsonProperty(value = "comment")
     String comment,
 
-
     /*
       Список продуктов
      */

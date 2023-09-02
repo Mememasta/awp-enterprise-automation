@@ -46,7 +46,7 @@ public record ReportCardRequest(
         /*
           Список продуктов
          */
-        @JsonProperty(value = "userReportCard")
+        @JsonProperty(value = "user_report_card")
         List<ReportCardUserDTO> userReportCard,
 
         /*
