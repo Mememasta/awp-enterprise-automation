@@ -4,14 +4,14 @@ import org.springframework.stereotype.Component;
 import ru.awp.enterprise.automation.models.dao.NoteDAO;
 import ru.awp.enterprise.automation.models.dto.NoteDTO;
 import ru.awp.enterprise.automation.models.dto.NoteProductDTO;
-import ru.awp.enterprise.automation.models.response.NoteUserResponse;
+import ru.awp.enterprise.automation.models.response.SimpleUserResponse;
 
 import java.util.List;
 
 @Component
 public class NoteDTOMapper {
 
-    public NoteDTO map(NoteDAO noteDAO, List<NoteProductDTO> noteProductDTOS, NoteUserResponse userDTO, NoteUserResponse userEditDTO) {
+    public NoteDTO map(NoteDAO noteDAO, List<NoteProductDTO> noteProductDTOS, SimpleUserResponse userDTO, SimpleUserResponse userEditDTO) {
         return NoteDTO.builder()
                 .id(noteDAO.id())
                 .status(noteDAO.status())

@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.exception.ClientNotFoundException;
 import ru.awp.enterprise.automation.exception.NotFoundProductException;
 import ru.awp.enterprise.automation.mapper.NoteDTOMapper;
-import ru.awp.enterprise.automation.mapper.NoteUserResponseMapper;
+import ru.awp.enterprise.automation.mapper.SimpleUserResponseMapper;
 import ru.awp.enterprise.automation.models.dao.NoteDAO;
 import ru.awp.enterprise.automation.models.dto.NoteDTO;
 import ru.awp.enterprise.automation.models.dto.NoteProductDTO;
@@ -29,7 +29,7 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     private final NoteProductService noteProductService;
 
     private final NoteDTOMapper noteDTOMapper;
-    private final NoteUserResponseMapper noteUserResponseMapper;
+    private final SimpleUserResponseMapper simpleUserResponseMapper;
 
     @Override
     public Flux<NoteDTO> findNoteAndProduct(Integer areaId) {
@@ -59,10 +59,10 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
         var noteProductsMono = noteProductService.findNoteProducts(note.id())
                 .collectList();
         var userMono = userService.findById(note.user())
-                .map(noteUserResponseMapper);
+                .map(simpleUserResponseMapper);
         var editUserMono = userService.findById(note.userEdit())
-                .map(noteUserResponseMapper)
-                .switchIfEmpty(Mono.just(noteUserResponseMapper.apply(null)));
+                .map(simpleUserResponseMapper)
+                .switchIfEmpty(Mono.just(simpleUserResponseMapper.apply(null)));
 
         return Mono.zip(Mono.just(note), noteProductsMono, userMono, editUserMono)
                 .map(tuple -> noteDTOMapper.map(tuple.getT1(), tuple.getT2(), tuple.getT3(), tuple.getT4()));

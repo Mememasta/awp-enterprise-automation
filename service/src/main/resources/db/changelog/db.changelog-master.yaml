@@ -159,3 +159,81 @@ databaseChangeLog:
             referencedTableName: products
             referencedColumnNames: product_id
             constraintName: fk_product_id
+  - changeSet:
+      id: 20230902-update-tables
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - createTable:
+            schema: awp_enterprise_automation
+            tableName: report_card
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    foreignKeyName: fk_products_user_id
+                    references: users(id)
+              - column:
+                  name: user_edit_id
+                  type: UUID
+                  constraints:
+                    foreignKeyName: fk_products_user_edit_id
+                    references: users(id)
+              - column:
+                  name: created
+                  type: date
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated
+                  type: timestamp with timezone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: area
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: varchar(512)
+                  constraints:
+                    nullable: true
+        - createTable:
+            schema: awp_enterprise_automation
+            tableName: report_card_user
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_card_user_id
+                    references: users(id)
+                    nullable: false
+              - column:
+                  name: report_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_card_report_id
+                    references: report_card(id)
+                    nullable: false
+              - column:
+                  name: hours
+                  type: double
+                  constraints:
+                    nullable: false
