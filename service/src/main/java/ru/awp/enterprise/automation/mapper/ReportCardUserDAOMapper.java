@@ -27,7 +27,7 @@ public class ReportCardUserDAOMapper implements TriFunction<Long, UUID, ReportCa
     public ReportCardUserDTO apply(ReportCardUserDAO reportCardUserDAO) {
         return ReportCardUserDTO.builder()
                 .id(reportCardUserDAO.id())
-                .userId(reportCardUserDAO.reportCardId())
+                .userId(reportCardUserDAO.userId())
                 .hours(reportCardUserDAO.hours())
                 .build();
     }
