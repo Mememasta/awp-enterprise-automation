@@ -34,7 +34,7 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     @Override
     public Flux<NoteDTO> findNoteAndProduct(Integer areaId) {
         return noteService.findByArea(areaId)
-                .flatMap(this::buildNoteToDTO);
+                .concatMap(this::buildNoteToDTO);
     }
 
     @Override
