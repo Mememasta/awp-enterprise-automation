@@ -40,13 +40,13 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     @Override
     public Flux<NoteDTO> findAll() {
         return noteService.findAll()
-                .flatMap(this::buildNoteToDTO);
+                .concatMap(this::buildNoteToDTO);
     }
 
     @Override
     public Flux<NoteDTO> findNoteByUserId(UUID uuid) {
         return noteService.findByUserId(uuid)
-                .flatMap(this::buildNoteToDTO);
+                .concatMap(this::buildNoteToDTO);
     }
 
     @Override
