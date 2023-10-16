@@ -35,19 +35,19 @@ public class ReportCardFacadeServiceImpl implements ReportCardFacadeService {
     @Override
     public Flux<ReportCardDTO> findReportCardAndProduct(Integer areaId) {
         return reportCardService.findByArea(areaId)
-                .flatMap(this::buildReportCardDTO);
+                .concatMap(this::buildReportCardDTO);
     }
 
     @Override
     public Flux<ReportCardDTO> findAll() {
         return reportCardService.findAll()
-                .flatMap(this::buildReportCardDTO);
+                .concatMap(this::buildReportCardDTO);
     }
 
     @Override
     public Flux<ReportCardDTO> findReportCardByUserId(UUID userId) {
         return reportCardService.findByUserId(userId)
-                .flatMap(this::buildReportCardDTO);
+                .concatMap(this::buildReportCardDTO);
     }
 
     @Override
