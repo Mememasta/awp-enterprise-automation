@@ -64,6 +64,16 @@ public class NoteProductServiceImpl implements NoteProductService {
     }
 
     @Override
+    public Flux<NoteProductDTO> findNoteProductsByIds(List<Long> noteProductId) {
+        if (Objects.isNull(noteProductId)) {
+            return Flux.empty();
+        }
+        return Flux.fromIterable(noteProductId)
+                .flatMap(noteProductRepository::findById)
+                .map(noteProductDAOMapper::apply);
+    }
+
+    @Override
     public Mono<Void> deleteNoteProduct(Long noteProductId) {
         return noteProductRepository.findById(noteProductId)
                 .switchIfEmpty(Mono.error(ProductDeleteException::new))
