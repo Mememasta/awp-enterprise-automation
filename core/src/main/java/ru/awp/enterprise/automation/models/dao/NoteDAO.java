@@ -27,6 +27,8 @@ public record NoteDAO(
     OffsetDateTime updated,
     @Column(value = "area")
     Integer area,
+    @Column(value = "redirection")
+    Integer redirection,
     @Column(value = "status")
     Integer status,
     @Column(value = "comment")

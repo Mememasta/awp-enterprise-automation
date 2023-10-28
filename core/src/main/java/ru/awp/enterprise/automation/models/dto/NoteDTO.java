@@ -47,6 +47,12 @@ public record NoteDTO(
         Integer area,
 
         /*
+          Производство на которое перенаправили продукт
+         */
+        @JsonProperty(value = "redirection")
+        Integer redirection,
+
+        /*
           Состояние продукции (Произведено/Отгружено)
          */
         @JsonProperty(value = "status")

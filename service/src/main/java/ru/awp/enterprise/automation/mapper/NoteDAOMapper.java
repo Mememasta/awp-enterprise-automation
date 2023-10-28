@@ -19,6 +19,7 @@ public class NoteDAOMapper implements BiFunction<NoteRequest, Double, NoteDAO> {
                 .status(request.status())
                 .user(request.userId())
                 .area(request.area())
+                .redirection(request.redirection())
                 .sumConcreteVolume(productsVolume)
                 .build();
     }
@@ -33,6 +34,7 @@ public class NoteDAOMapper implements BiFunction<NoteRequest, Double, NoteDAO> {
                 .user(note.user())
                 .userEdit(request.userEditId())
                 .area(request.area())
+                .redirection(request.redirection())
                 .sumConcreteVolume(productsVolume)
                 .build();
     }

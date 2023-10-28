@@ -19,6 +19,7 @@ public class NoteDTOMapper {
                 .created(noteDAO.created())
                 .updated(noteDAO.updated())
                 .area(noteDAO.area())
+                .redirection(noteDAO.redirection())
                 .userDTO(userDTO)
                 .userEdit(userEditDTO)
                 .products(noteProductDTOS)

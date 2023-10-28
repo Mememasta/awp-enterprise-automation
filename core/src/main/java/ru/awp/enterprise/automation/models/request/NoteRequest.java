@@ -39,6 +39,12 @@ public record NoteRequest(
         Integer area,
 
         /*
+          Производство на которое перенаправили продукт
+         */
+        @JsonProperty(value = "redirection")
+        Integer redirection,
+
+        /*
           Состояние продукции (Произведено/Отгружено)
          */
         @NotNull
