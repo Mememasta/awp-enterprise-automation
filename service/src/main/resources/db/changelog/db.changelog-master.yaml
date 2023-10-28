@@ -263,5 +263,6 @@ databaseChangeLog:
                   name: redirection
                   type: int
         - dropColumn:
+            schema: awp_enterprise_automation
             tableName: products
             columnName: value_by_area
