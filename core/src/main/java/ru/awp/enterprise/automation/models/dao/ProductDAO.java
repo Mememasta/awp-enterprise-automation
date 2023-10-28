@@ -5,9 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-import ru.awp.enterprise.automation.models.converter.ValueByAreaMap;
 
-import java.util.List;
 import java.util.Objects;
 
 @Builder
@@ -22,10 +20,7 @@ public record ProductDAO(
         @Column(value = "is_available")
         boolean isAvailable,
         @Column(value = "concrete_volume")
-        double concreteVolume,
-        @Column(value = "value_by_area")
-        List<ValueByAreaMap> valueByArea
-
+        double concreteVolume
 
 )  implements Persistable<Long> {
         @Override

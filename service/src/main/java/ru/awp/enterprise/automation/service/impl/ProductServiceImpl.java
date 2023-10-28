@@ -10,18 +10,12 @@ import ru.awp.enterprise.automation.exception.NotFoundProductException;
 import ru.awp.enterprise.automation.exception.ProductAlreadyExist;
 import ru.awp.enterprise.automation.mapper.ProductDAOMapper;
 import ru.awp.enterprise.automation.mapper.ProductMapper;
-import ru.awp.enterprise.automation.models.converter.ValueByAreaMap;
-import ru.awp.enterprise.automation.models.dto.NoteProductDTO;
 import ru.awp.enterprise.automation.models.dto.ProductDTO;
-import ru.awp.enterprise.automation.models.request.NoteRequest;
 import ru.awp.enterprise.automation.models.request.ProductRequest;
 import ru.awp.enterprise.automation.repository.ProductRepository;
-import ru.awp.enterprise.automation.service.NoteProductService;
 import ru.awp.enterprise.automation.service.ProductService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -29,7 +23,6 @@ import java.util.Objects;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final NoteProductService noteProductService;
     private final ProductMapper productMapper;
     private final ProductDAOMapper productDaoMapper;
 
@@ -72,37 +65,6 @@ public class ProductServiceImpl implements ProductService {
                 .switchIfEmpty(Mono.error(NotFoundProductException::new))
                 .flatMap(product -> productRepository.save(productDaoMapper.apply(id, productRequest)))
                 .flatMap(it -> Mono.empty());
-    }
-
-    @Override
-    public Mono<Object> updateProductByAreaId(NoteRequest noteRequest) {
-        final Map<Long, Long> productsGroupingByProductId = new HashMap<>(Map.of());
-        for (NoteProductDTO product : noteRequest.products()) {
-            if (productsGroupingByProductId.containsKey(product.productId())) {
-                productsGroupingByProductId.put(product.productId(), productsGroupingByProductId.get(product.productId()) + product.value());
-            } else {
-                productsGroupingByProductId.put(product.productId(), product.value());
-            }
-        }
-        return noteProductService.findNoteProductsByIds(noteRequest.deletedProductsId())
-                .flatMap(noteProduct -> productRepository.findById(noteProduct.productId())
-                        .map(productMapper)
-                        .flatMap(it -> {
-                            var valueByAreas = it.valueByArea().stream()
-                                    .map(valueByArea -> {
-                                        if (valueByArea.getArea() == noteRequest.area()) {
-                                            valueByArea.setValue(valueByArea.getValue() - noteProduct.value());
-                                        }
-                                        return valueByArea;
-                                    })
-                                    .toList();
-                            return productRepository.save(productDaoMapper.apply(it, valueByAreas));
-                        }))
-                        .then(Flux.fromIterable(productsGroupingByProductId.keySet())
-                                .flatMap(this::getProductById)
-                                .flatMap(product ->
-                                        productRepository.save(productDaoMapper.apply(product, new ValueByAreaMap(noteRequest.area(), productsGroupingByProductId.get(product.productId())))))
-                                .then(Mono.empty()));
     }
 
     @Override

@@ -74,9 +74,6 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
         return validateUsers(noteRequest.userId())
                 .then(validateProducts(noteRequest.products()))
                 .flatMap(volume -> saveNoteAndReturnUUID(noteRequest, volume))
-                .flatMap(uuid -> productService.updateProductByAreaId(noteRequest)
-                            .then(Mono.just(uuid))
-                )
                 .flatMap(uuid -> noteProductService.save(uuid, noteRequest.products()));
     }
 
@@ -85,13 +82,10 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     public Mono<Void> validateAndUpdateNoteAndProduct(UUID noteId, NoteRequest noteRequest) {
         return validateUsers(noteRequest.userId())
                 .then(validateUsers(noteRequest.userEditId()))
+                .then(deletedNoteProducts(noteRequest.deletedProductsId()))
                 .then(validateProductsForUpdateNote(noteRequest.products()))
                 .flatMap(volume -> updateNoteAndReturnUUID(noteId, noteRequest, volume))
-                .flatMap(uuid -> productService.updateProductByAreaId(noteRequest)
-                        .then(Mono.just(uuid))
-                )
                 .flatMap(uuid -> noteProductService.update(uuid, noteRequest.products()))
-                .then(deletedNoteProducts(noteRequest.deletedProductsId()))
                 .then();
     }
 

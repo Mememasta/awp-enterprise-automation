@@ -237,16 +237,3 @@ databaseChangeLog:
                   type: double
                   constraints:
                     nullable: false
-  - changeSet:
-      id: 20231008-update-products-table
-      author: MChuchalov
-      runInTransaction: false
-      changes:
-        - addColumn:
-            schemaName: awp_enterprise_automation
-            tableName: products
-            columns:
-              - column:
-                  name: value_by_area
-                  type: varchar(4096)
-                  defaultValue: "[]"

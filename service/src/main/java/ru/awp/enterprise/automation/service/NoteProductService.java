@@ -15,8 +15,6 @@ public interface NoteProductService {
 
     Flux<NoteProductDTO> findNoteProducts(UUID uuid);
 
-    Flux<NoteProductDTO> findNoteProductsByIds(List<Long> noteProductId);
-
     Mono<Void> deleteNoteProduct(Long noteProductId);
 
 }
