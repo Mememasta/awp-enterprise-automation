@@ -38,7 +38,7 @@ public class NoteProductServiceImpl implements NoteProductService {
     @Override
     public Mono<Void> update(UUID uuid, List<NoteProductDTO> productDTO) {
         if (Objects.isNull(uuid)) {
-            throw new NoteNotFoundException();
+            return Mono.empty();
         }
         if (Objects.isNull(productDTO) || productDTO.isEmpty()) {
             return Mono.empty();
