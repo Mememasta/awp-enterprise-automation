@@ -73,8 +73,7 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     public Mono<Void> validateAndSaveNoteAndProduct(NoteRequest noteRequest) {
         return validateUsers(noteRequest.userId())
                 .then(validateProducts(noteRequest.products()))
-                .flatMap(volume -> saveNoteAndReturnUUID(noteRequest, volume))
-                .flatMap(uuid -> noteProductService.save(uuid, noteRequest.products()));
+                .flatMap(volume -> saveNoteAndReturnUUID(noteRequest, volume));
     }
 
     @Override
@@ -85,7 +84,6 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
                 .then(deletedNoteProducts(noteRequest.deletedProductsId()))
                 .then(validateProductsForUpdateNote(noteRequest.products()))
                 .flatMap(volume -> updateNoteAndReturnUUID(noteId, noteRequest, volume))
-                .flatMap(uuid -> noteProductService.update(uuid, noteRequest.products()))
                 .then();
     }
 
@@ -127,15 +125,19 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
                 .then();
     }
 
-    private Mono<UUID> saveNoteAndReturnUUID(NoteRequest request, Double productsVolume) {
+    private Mono<Void> saveNoteAndReturnUUID(NoteRequest noteRequest, Double productsVolume) {
         // Сохранить заметку и вернуть ее UUID
-        return noteService.saveNote(request, productsVolume)
-                .map(NoteDAO::id);
+        return noteService.saveNote(noteRequest, productsVolume)
+                .flatMap(note -> Mono.zip(Mono.just(note.id()), Mono.justOrEmpty(note.redirectionId())))
+                .flatMap(uuidTuple -> noteProductService.save(uuidTuple.getT1(), noteRequest.products())
+                            .then(noteProductService.save(uuidTuple.getT2(), noteRequest.products())));
     }
 
-    private Mono<UUID> updateNoteAndReturnUUID(UUID noteId, NoteRequest noteRequest, Double productsVolume) {
+    private Mono<Void> updateNoteAndReturnUUID(UUID noteId, NoteRequest noteRequest, Double productsVolume) {
         // Обновить заметку и вернуть ее UUID
         return noteService.updateNote(noteId, noteRequest, productsVolume)
-                .map(NoteDAO::id);
+                .flatMap(note -> Mono.zip(Mono.just(note.id()), Mono.justOrEmpty(note.redirectionId())))
+                .flatMap(uuidTuple -> noteProductService.update(uuidTuple.getT1(), noteRequest.products())
+                        .then(noteProductService.update(uuidTuple.getT2(), noteRequest.products())));
     }
 }

@@ -12,6 +12,7 @@ import ru.awp.enterprise.automation.models.request.NoteRequest;
 import ru.awp.enterprise.automation.repository.NoteRepository;
 import ru.awp.enterprise.automation.service.NoteService;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -52,9 +53,14 @@ class NoteServiceImpl implements NoteService {
                         .then(this.findById(uuid)
                                 .map(note -> noteDAOMapper.apply(note, noteRequest, productsVolume))
                                 .flatMap(noteRepository::save)))
-                .switchIfEmpty(Mono.defer(() -> this.findById(uuid)
-                        .map(note -> noteDAOMapper.apply(note, noteRequest, productsVolume))
-                        .flatMap(noteRepository::save)));
+                .switchIfEmpty(this.findById(uuid)
+                        .filter(note -> Objects.nonNull(note.redirection()) && Objects.isNull(note.redirectionId()))
+                        .flatMap(note -> noteRepository.save(noteDAOMapper.applyRedirectionNote(noteRequest, productsVolume))
+                                .flatMap(redirectionNote -> noteRepository.save(noteDAOMapper.updateNoteByRedirectionId(redirectionNote.id(), note, noteRequest, productsVolume))))
+
+                        .switchIfEmpty(this.findById(uuid)
+                                .map(note -> noteDAOMapper.apply(note, noteRequest, productsVolume))
+                                .flatMap(noteRepository::save)));
     }
 
     @Override
