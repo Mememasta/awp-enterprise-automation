@@ -29,6 +29,8 @@ public record NoteDAO(
     Integer area,
     @Column(value = "redirection")
     Integer redirection,
+    @Column(value = "redirection_id")
+    UUID redirectionId,
     @Column(value = "status")
     Integer status,
     @Column(value = "comment")

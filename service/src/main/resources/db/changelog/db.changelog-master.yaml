@@ -266,3 +266,19 @@ databaseChangeLog:
             schema: awp_enterprise_automation
             tableName: products
             columnName: value_by_area
+  - changeSet:
+      id: 20231029-add-column-redirection-id
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - addColumn:
+            schema: awp_enterprise_automation
+            tableName: notes
+            columns:
+              - column:
+                  name: redirection_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_notes_id
+                    references: notes(id)

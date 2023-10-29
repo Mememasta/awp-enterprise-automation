@@ -20,6 +20,7 @@ public class NoteDTOMapper {
                 .updated(noteDAO.updated())
                 .area(noteDAO.area())
                 .redirection(noteDAO.redirection())
+                .redirectionId(noteDAO.redirectionId())
                 .userDTO(userDTO)
                 .userEdit(userEditDTO)
                 .products(noteProductDTOS)

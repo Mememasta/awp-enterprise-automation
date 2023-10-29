@@ -45,6 +45,12 @@ public record NoteRequest(
         Integer redirection,
 
         /*
+          Идентификатор записи на которую перенаправили продукт
+         */
+        @JsonProperty(value = "redirection_id")
+        UUID redirectionId,
+
+        /*
           Состояние продукции (Произведено/Отгружено)
          */
         @NotNull

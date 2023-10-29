@@ -3,6 +3,7 @@ package ru.awp.enterprise.automation.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.mapper.NoteDAOMapper;
@@ -42,14 +43,26 @@ class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    @Transactional
     public Mono<NoteDAO> updateNote(UUID uuid, NoteRequest noteRequest, Double productsVolume) {
-        return this.findById(uuid)
-                .map(note -> noteDAOMapper.apply(note, noteRequest, productsVolume))
-                .flatMap(noteRepository::save);
+        return Mono.justOrEmpty(noteRequest.redirectionId())
+                .flatMap(noteId -> this.findById(noteId)
+                        .map(note -> noteDAOMapper.updateRedirectionNote(note, noteRequest, productsVolume))
+                        .flatMap(noteRepository::save)
+                        .then(this.findById(uuid)
+                                .map(note -> noteDAOMapper.apply(note, noteRequest, productsVolume))
+                                .flatMap(noteRepository::save)))
+                .switchIfEmpty(Mono.defer(() -> this.findById(uuid)
+                        .map(note -> noteDAOMapper.apply(note, noteRequest, productsVolume))
+                        .flatMap(noteRepository::save)));
     }
 
     @Override
+    @Transactional
     public Mono<NoteDAO> saveNote(NoteRequest request, Double productsVolume) {
-        return noteRepository.save(noteDAOMapper.apply(request, productsVolume));
+        return Mono.justOrEmpty(request.redirection())
+                .flatMap(redirection -> noteRepository.save(noteDAOMapper.applyRedirectionNote(request, productsVolume))
+                        .flatMap(redirectionNote -> noteRepository.save(noteDAOMapper.applyRedirectionNote(redirectionNote, request, productsVolume))))
+                .switchIfEmpty(Mono.defer(() -> noteRepository.save(noteDAOMapper.apply(request, productsVolume))));
     }
 }
