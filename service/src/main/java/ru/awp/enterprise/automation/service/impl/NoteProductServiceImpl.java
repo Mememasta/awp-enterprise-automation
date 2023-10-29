@@ -49,12 +49,34 @@ public class NoteProductServiceImpl implements NoteProductService {
                 .then(Mono.empty());
     }
 
+    @Override
+    public Mono<Void> updateRedirectProduct(UUID uuid, List<NoteProductDTO> productDTO) {
+        if (Objects.isNull(uuid)) {
+            return Mono.empty();
+        }
+        if (Objects.isNull(productDTO) || productDTO.isEmpty()) {
+            return Mono.empty();
+        }
+        return Flux.fromIterable(productDTO)
+                .flatMap(product -> buildNoteProductRedirect(uuid, product))
+                .flatMap(noteProductRepository::save)
+                .then(Mono.empty());
+    }
+
     private Mono<NoteProductDAO> buildNoteProduct(UUID uuid, NoteProductDTO noteProductDTO) {
         if (Objects.isNull(noteProductDTO.id())) {
             return Mono.just(noteProductDAOMapper.apply(uuid, noteProductDTO));
         }
         return noteProductRepository.findById(noteProductDTO.id())
                 .switchIfEmpty(Mono.error(new NoteProductNotFoundException()));
+    }
+
+    private Mono<NoteProductDAO> buildNoteProductRedirect(UUID uuid, NoteProductDTO noteProductDTO) {
+        if (Objects.isNull(noteProductDTO.id())) {
+            return Mono.just(noteProductDAOMapper.apply(uuid, noteProductDTO));
+        }
+        return noteProductRepository.findById(noteProductDTO.id())
+                .switchIfEmpty(Mono.just(noteProductDAOMapper.apply(uuid, noteProductDTO)));
     }
 
     @Override
