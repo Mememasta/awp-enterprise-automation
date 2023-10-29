@@ -84,7 +84,6 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
                 .then(deletedNoteProducts(noteRequest.deletedProductsId()))
                 .then(validateProductsForUpdateNote(noteRequest.products()))
                 .flatMap(volume -> updateNoteAndReturnUUID(noteId, noteRequest, volume))
-                .flatMap(uuid -> noteProductService.update(uuid, noteRequest.products()))
                 .then();
     }
 
@@ -133,9 +132,10 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
                             .then(noteProductService.save(note.redirectionId(), noteRequest.products())));
     }
 
-    private Mono<UUID> updateNoteAndReturnUUID(UUID noteId, NoteRequest noteRequest, Double productsVolume) {
+    private Mono<Void> updateNoteAndReturnUUID(UUID noteId, NoteRequest noteRequest, Double productsVolume) {
         // Обновить заметку и вернуть ее UUID
         return noteService.updateNote(noteId, noteRequest, productsVolume)
-                .map(NoteDAO::id);
+                .flatMap(note -> noteProductService.save(note.id(), noteRequest.products())
+                        .then(noteProductService.save(note.redirectionId(), noteRequest.products())));
     }
 }
