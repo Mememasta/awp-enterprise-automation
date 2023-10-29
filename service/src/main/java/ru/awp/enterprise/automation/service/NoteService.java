@@ -20,5 +20,6 @@ public interface NoteService {
     Mono<NoteDAO> updateNote(UUID uuid, NoteRequest noteRequest, Double productsVolume);
 
     Mono<NoteDAO> saveNote(NoteRequest request, Double productsVolume);
+    Mono<Void> deleteNote(UUID noteId);
 
 }

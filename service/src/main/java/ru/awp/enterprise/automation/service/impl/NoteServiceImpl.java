@@ -10,6 +10,7 @@ import ru.awp.enterprise.automation.mapper.NoteDAOMapper;
 import ru.awp.enterprise.automation.models.dao.NoteDAO;
 import ru.awp.enterprise.automation.models.request.NoteRequest;
 import ru.awp.enterprise.automation.repository.NoteRepository;
+import ru.awp.enterprise.automation.service.NoteProductService;
 import ru.awp.enterprise.automation.service.NoteService;
 
 import java.util.Objects;
@@ -21,6 +22,7 @@ class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
     private final NoteDAOMapper noteDAOMapper;
+    private final NoteProductService noteProductService;
 
 
     @Override
@@ -48,8 +50,17 @@ class NoteServiceImpl implements NoteService {
     public Mono<NoteDAO> updateNote(UUID uuid, NoteRequest noteRequest, Double productsVolume) {
         return Mono.justOrEmpty(noteRequest.redirectionId())
                 .flatMap(noteId -> this.findById(noteId)
-                        .map(note -> noteDAOMapper.updateRedirectionNote(note, noteRequest, productsVolume))
+                        .filter(noteDAO -> Objects.nonNull(noteRequest.redirection()))
+                        .map(noteDAO -> noteDAOMapper.updateRedirectionNote(noteDAO, noteRequest, productsVolume))
                         .flatMap(noteRepository::save)
+                        .switchIfEmpty(this.findById(noteId)
+                                .filter(note -> Objects.isNull(noteRequest.redirection()))
+                                .flatMap(note -> this.findById(uuid))
+                                .map(note -> noteDAOMapper.applyDeletedRedirectionNote(note, noteRequest, productsVolume))
+                                .flatMap(noteRepository::save)
+                                .flatMap(note -> noteProductService.deleteNoteProductByNoteId(noteId).then(Mono.just(note)))
+                                .flatMap(note -> this.deleteNote(noteId).then(Mono.just(note)))
+                        )
                         .then(this.findById(uuid)
                                 .map(note -> noteDAOMapper.apply(note, noteRequest, productsVolume))
                                 .flatMap(noteRepository::save)))
@@ -70,5 +81,10 @@ class NoteServiceImpl implements NoteService {
                 .flatMap(redirection -> noteRepository.save(noteDAOMapper.applyRedirectionNote(request, productsVolume))
                         .flatMap(redirectionNote -> noteRepository.save(noteDAOMapper.applyRedirectionNote(redirectionNote, request, productsVolume))))
                 .switchIfEmpty(Mono.defer(() -> noteRepository.save(noteDAOMapper.apply(request, productsVolume))));
+    }
+
+    @Override
+    public Mono<Void> deleteNote(UUID noteId) {
+        return noteRepository.deleteById(noteId);
     }
 }

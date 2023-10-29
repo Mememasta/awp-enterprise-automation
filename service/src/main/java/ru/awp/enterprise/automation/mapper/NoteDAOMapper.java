@@ -70,7 +70,7 @@ public class NoteDAOMapper implements BiFunction<NoteRequest, Double, NoteDAO> {
     public NoteDAO updateRedirectionNote(NoteDAO note, NoteRequest request, Double productsVolume) {
         return NoteDAO.builder()
                 .id(note.id())
-                .created(note.created())
+                .created(request.created())
                 .updated(OffsetDateTime.now())
                 .comment(request.comment())
                 .status(note.status())
@@ -93,6 +93,22 @@ public class NoteDAOMapper implements BiFunction<NoteRequest, Double, NoteDAO> {
                 .area(request.area())
                 .redirection(request.redirection())
                 .redirectionId(note.redirectionId())
+                .sumConcreteVolume(productsVolume)
+                .build();
+    }
+
+    public NoteDAO applyDeletedRedirectionNote(NoteDAO note, NoteRequest request, Double productsVolume) {
+        return NoteDAO.builder()
+                .id(note.id())
+                .created(request.created())
+                .updated(OffsetDateTime.now())
+                .comment(request.comment())
+                .status(request.status())
+                .user(note.user())
+                .userEdit(request.userEditId())
+                .redirectionId(null)
+                .redirection(null)
+                .area(request.area())
                 .sumConcreteVolume(productsVolume)
                 .build();
     }

@@ -49,6 +49,12 @@ public class NoteProductServiceImpl implements NoteProductService {
                 .then(Mono.empty());
     }
 
+    @Override
+    public Mono<Void> updateRedirectionNote(UUID uuid, List<NoteProductDTO> productDTO) {
+        return deleteNoteProductByNoteId(uuid)
+                .then(save(uuid, productDTO));
+    }
+
     private Mono<NoteProductDAO> buildNoteProduct(UUID uuid, NoteProductDTO noteProductDTO) {
         if (Objects.isNull(noteProductDTO.id())) {
             return Mono.just(noteProductDAOMapper.apply(uuid, noteProductDTO));
@@ -68,6 +74,13 @@ public class NoteProductServiceImpl implements NoteProductService {
         return noteProductRepository.findById(noteProductId)
                 .switchIfEmpty(Mono.error(ProductDeleteException::new))
                 .flatMap(noteProductRepository::delete);
+    }
+
+    @Override
+    public Mono<Void> deleteNoteProductByNoteId(UUID noteId) {
+        return noteProductRepository.findAllByNoteId(noteId)
+                .flatMap(noteProduct -> deleteNoteProduct(noteProduct.id()))
+                .then();
     }
 
 }
