@@ -136,6 +136,6 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
         // Обновить заметку и вернуть ее UUID
         return noteService.updateNote(noteId, noteRequest, productsVolume)
                 .flatMap(note -> noteProductService.update(note.id(), noteRequest.products())
-                        .then(noteProductService.updateRedirectProduct(note.redirectionId(), noteRequest.products())));
+                        .then(noteProductService.save(note.redirectionId(), noteRequest.products())));
     }
 }
