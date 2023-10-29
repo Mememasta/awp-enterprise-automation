@@ -54,7 +54,7 @@ class NoteServiceImpl implements NoteService {
                                 .map(note -> noteDAOMapper.apply(note, noteRequest, productsVolume))
                                 .flatMap(noteRepository::save)))
                 .switchIfEmpty(this.findById(uuid)
-                        .filter(note -> Objects.nonNull(note.redirection()) && Objects.isNull(note.redirectionId()))
+                        .filter(note -> Objects.nonNull(noteRequest.redirection()) && Objects.isNull(note.redirection()) && Objects.isNull(note.redirectionId()))
                         .flatMap(note -> noteRepository.save(noteDAOMapper.applyRedirectionNote(noteRequest, productsVolume))
                                 .flatMap(redirectionNote -> noteRepository.save(noteDAOMapper.updateNoteByRedirectionId(redirectionNote.id(), note, noteRequest, productsVolume))))
 

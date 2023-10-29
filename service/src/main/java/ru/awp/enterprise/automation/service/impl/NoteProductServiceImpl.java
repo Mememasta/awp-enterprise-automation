@@ -27,7 +27,7 @@ public class NoteProductServiceImpl implements NoteProductService {
     @Override
     public Mono<Void> save(UUID uuid, List<NoteProductDTO> productDTO) {
         if (Objects.isNull(uuid)) {
-            throw new NoteNotFoundException();
+            return Mono.empty();
         }
         return Flux.fromIterable(productDTO)
                 .map(noteProduct -> noteProductDAOMapper.apply(uuid, noteProduct))
