@@ -10,6 +10,7 @@ import java.util.UUID;
 public interface NoteService {
 
     Flux<NoteDAO> findByArea(Integer areaId);
+    Flux<NoteDAO> findByArea(Integer areaId, Integer page, Integer size);
 
     Flux<NoteDAO> findByUserId(UUID userId);
 

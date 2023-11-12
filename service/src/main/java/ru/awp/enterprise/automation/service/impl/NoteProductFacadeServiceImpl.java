@@ -32,8 +32,8 @@ public class NoteProductFacadeServiceImpl implements NoteProductFacadeService {
     private final SimpleUserResponseMapper simpleUserResponseMapper;
 
     @Override
-    public Flux<NoteDTO> findNoteAndProduct(Integer areaId) {
-        return noteService.findByArea(areaId)
+    public Flux<NoteDTO> findNoteAndProduct(Integer areaId, Integer page, Integer size) {
+        return noteService.findByArea(areaId, page, size)
                 .concatMap(this::buildNoteToDTO);
     }
 

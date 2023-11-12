@@ -1,6 +1,8 @@
 package ru.awp.enterprise.automation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +29,16 @@ class NoteServiceImpl implements NoteService {
 
     @Override
     public Flux<NoteDAO> findByArea(Integer areaId) {
-        return noteRepository.findAllByArea(areaId, Sort.by("created"));
+        return noteRepository.findAllByArea(areaId, Sort.by("created").descending());
+    }
+
+    @Override
+    public Flux<NoteDAO> findByArea(Integer areaId, Integer page, Integer size) {
+        if (Objects.isNull(page) || Objects.isNull(size)) {
+            return findByArea(areaId);
+        }
+        Pageable anyPage = PageRequest.of(page, size, Sort.by("created").descending());
+        return noteRepository.findAllByArea(areaId, anyPage);
     }
 
     @Override

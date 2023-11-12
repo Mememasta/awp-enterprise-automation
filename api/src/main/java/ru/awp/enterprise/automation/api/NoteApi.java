@@ -14,7 +14,8 @@ import java.util.UUID;
 public interface NoteApi {
 
     @GetMapping(value = "/area/{areaId}")
-    Flux<NoteDTO> findNotesByAreaId(@PathVariable("areaId") @NotNull Integer areaId);
+    Flux<NoteDTO> findNotesByAreaId(@PathVariable("areaId") @NotNull Integer areaId,
+                                    @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size);
 
     @GetMapping(value = "/all")
     Flux<NoteDTO> findAllNote();

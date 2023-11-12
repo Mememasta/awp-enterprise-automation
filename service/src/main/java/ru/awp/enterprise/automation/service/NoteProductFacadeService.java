@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface NoteProductFacadeService {
 
-    Flux<NoteDTO> findNoteAndProduct(Integer areaId);
+    Flux<NoteDTO> findNoteAndProduct(Integer areaId, Integer page, Integer size);
 
     Flux<NoteDTO> findAll();
 

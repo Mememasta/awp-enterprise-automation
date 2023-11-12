@@ -19,8 +19,8 @@ public class NoteController implements NoteApi {
     private final NoteProductFacadeService noteProductFacadeService;
 
     @Override
-    public Flux<NoteDTO> findNotesByAreaId(Integer areaId) {
-        return noteProductFacadeService.findNoteAndProduct(areaId);
+    public Flux<NoteDTO> findNotesByAreaId(Integer areaId, Integer page, Integer size) {
+        return noteProductFacadeService.findNoteAndProduct(areaId, page, size);
     }
 
     @Override
