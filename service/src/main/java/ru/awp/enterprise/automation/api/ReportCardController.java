@@ -17,8 +17,8 @@ public class ReportCardController implements ReportCardApi {
     private final ReportCardFacadeService service;
 
     @Override
-    public Flux<ReportCardDTO> findReportCardByAreaId(Integer areaId) {
-        return service.findReportCardAndProduct(areaId);
+    public Flux<ReportCardDTO> findReportCardByAreaId(Integer areaId, Integer page, Integer size) {
+        return service.findReportCardAndProduct(areaId, page, size);
     }
 
     @Override

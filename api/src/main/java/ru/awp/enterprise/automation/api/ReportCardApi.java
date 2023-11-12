@@ -14,7 +14,8 @@ import java.util.UUID;
 public interface ReportCardApi {
 
     @GetMapping(value = "/area/{areaId}")
-    Flux<ReportCardDTO> findReportCardByAreaId(@PathVariable("areaId") @NotNull Integer areaId);
+    Flux<ReportCardDTO> findReportCardByAreaId(@PathVariable("areaId") @NotNull Integer areaId,
+                                               @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size);
 
     @GetMapping(value = "/all")
     Flux<ReportCardDTO> findAllNote();

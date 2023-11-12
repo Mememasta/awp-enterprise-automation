@@ -33,8 +33,8 @@ public class ReportCardFacadeServiceImpl implements ReportCardFacadeService {
     private final ReportCardDTOMapper mapper;
 
     @Override
-    public Flux<ReportCardDTO> findReportCardAndProduct(Integer areaId) {
-        return reportCardService.findByArea(areaId)
+    public Flux<ReportCardDTO> findReportCardAndProduct(Integer areaId, Integer page, Integer size) {
+        return reportCardService.findByArea(areaId, page, size)
                 .concatMap(this::buildReportCardDTO);
     }
 

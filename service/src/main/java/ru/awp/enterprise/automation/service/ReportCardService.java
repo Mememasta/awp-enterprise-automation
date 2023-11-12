@@ -11,6 +11,8 @@ public interface ReportCardService {
 
     Flux<ReportCardDAO> findByArea(Integer areaId);
 
+    Flux<ReportCardDAO> findByArea(Integer areaId, Integer page, Integer size);
+
     Flux<ReportCardDAO> findByUserId(UUID userId);
 
     Mono<ReportCardDAO> findById(UUID uuid);

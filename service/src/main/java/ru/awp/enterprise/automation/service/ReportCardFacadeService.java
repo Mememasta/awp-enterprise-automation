@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface ReportCardFacadeService {
 
-    Flux<ReportCardDTO> findReportCardAndProduct(Integer areaId);
+    Flux<ReportCardDTO> findReportCardAndProduct(Integer areaId, Integer page, Integer size);
 
     Flux<ReportCardDTO> findAll();
 

@@ -37,7 +37,7 @@ class NoteServiceImpl implements NoteService {
         if (Objects.isNull(page) || Objects.isNull(size)) {
             return findByArea(areaId);
         }
-        Pageable anyPage = PageRequest.of(page, size, Sort.by("created").descending());
+        var anyPage = PageRequest.of(page, size, Sort.by("created").descending());
         return noteRepository.findAllByArea(areaId, anyPage);
     }
 
