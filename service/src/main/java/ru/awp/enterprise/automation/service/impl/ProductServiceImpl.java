@@ -10,26 +10,49 @@ import ru.awp.enterprise.automation.exception.NotFoundProductException;
 import ru.awp.enterprise.automation.exception.ProductAlreadyExist;
 import ru.awp.enterprise.automation.mapper.ProductDAOMapper;
 import ru.awp.enterprise.automation.mapper.ProductMapper;
+import ru.awp.enterprise.automation.mapper.ProductWithBalanceMapper;
+import ru.awp.enterprise.automation.models.dao.ProductWithBalanceDAO;
 import ru.awp.enterprise.automation.models.dto.ProductDTO;
+import ru.awp.enterprise.automation.models.dto.ProductWithBalanceDTO;
 import ru.awp.enterprise.automation.models.request.ProductRequest;
 import ru.awp.enterprise.automation.repository.ProductRepository;
+import ru.awp.enterprise.automation.repository.ProductWithBalanceRepository;
+import ru.awp.enterprise.automation.service.NoteProductService;
 import ru.awp.enterprise.automation.service.ProductService;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductWithBalanceRepository productWithBalanceRepository;
     private final ProductMapper productMapper;
+    private final ProductWithBalanceMapper productWithBalanceMapper;
     private final ProductDAOMapper productDaoMapper;
+    private final NoteProductService noteProductService;
 
     @Override
     public Flux<ProductDTO> getAllProducts() {
         return productRepository.findAll(Sort.by("product_id"))
                 .map(productMapper);
+    }
+
+    @Override
+    public Flux<ProductWithBalanceDTO> getAllProductsWithBalance() {
+        return noteProductService.findAllTotalValue().flatMap(total -> getProductsWithBalanceByAreaIdAndProductId(total.area(), total.product_id())
+                .map(product -> {
+                    var balance = total.status_0() - total.status_1() + total.status_2() + product.coefficient();
+                    return productWithBalanceMapper.buildProduct(balance, product);
+                })
+        );
+    }
+
+    @Override
+    public Mono<ProductWithBalanceDAO> getProductsWithBalanceByAreaIdAndProductId(Integer areaId, Long productId) {
+        return productWithBalanceRepository.findByAreaIdAndProductId(areaId, productId)
+                .switchIfEmpty(Mono.defer(() -> Mono.just(ProductWithBalanceDAO.builder().productId(productId).areaId(areaId).coefficient(0).build())));
     }
 
     @Override
@@ -65,6 +88,14 @@ public class ProductServiceImpl implements ProductService {
                 .switchIfEmpty(Mono.error(NotFoundProductException::new))
                 .flatMap(product -> productRepository.save(productDaoMapper.apply(id, productRequest)))
                 .flatMap(it -> Mono.empty());
+    }
+
+    @Override
+    public Mono<Void> updateProductCoefficient(ProductWithBalanceDTO request) {
+        return getProductsWithBalanceByAreaIdAndProductId(request.areaId(), request.productId())
+                .flatMap(product -> productWithBalanceRepository.save(productWithBalanceMapper.buildProductDAO(product.id(), request)))
+                .switchIfEmpty(productWithBalanceRepository.save(productWithBalanceMapper.buildProductDAO(null, request)))
+                .then();
     }
 
     @Override

@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.awp.enterprise.automation.exception.NoteNotFoundException;
 import ru.awp.enterprise.automation.exception.NoteProductNotFoundException;
 import ru.awp.enterprise.automation.exception.ProductDeleteException;
 import ru.awp.enterprise.automation.mapper.NoteProductDAOMapper;
 import ru.awp.enterprise.automation.models.dao.NoteProductDAO;
 import ru.awp.enterprise.automation.models.dto.NoteProductDTO;
+import ru.awp.enterprise.automation.models.dto.TotalValueByAreaAndProductId;
 import ru.awp.enterprise.automation.repository.NoteProductRepository;
 import ru.awp.enterprise.automation.service.NoteProductService;
 
@@ -67,6 +67,11 @@ public class NoteProductServiceImpl implements NoteProductService {
     public Flux<NoteProductDTO> findNoteProducts(UUID uuid) {
         return noteProductRepository.findAllByNoteId(uuid)
                 .map(noteProductDAOMapper::apply);
+    }
+
+    @Override
+    public Flux<TotalValueByAreaAndProductId> findAllTotalValue() {
+        return noteProductRepository.findAllTotalValue();
     }
 
     @Override

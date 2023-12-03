@@ -26,5 +26,4 @@ public class ProductDAOMapper implements Function<ProductRequest, ProductDAO> {
                 .concreteVolume(request.concreteVolume())
                 .build();
     }
-
 }

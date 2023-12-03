@@ -282,3 +282,57 @@ databaseChangeLog:
                     nullable: true
                     foreignKeyName: fk_notes_id
                     references: notes(id)
+
+  - changeSet:
+      id: 20231203-create-products-with-balance
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - sqlFile:
+            comment: create products with balance
+            path: db/scripts/CREATE_PRODUCTS_WITH_BALANCE.sql
+  - changeSet:
+      id: 20231008-update-products-table
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - addColumn:
+            schemaName: awp_enterprise_automation
+            tableName: products
+            columns:
+              - column:
+                  name: value_by_area
+                  type: varchar(4096)
+                  defaultValue: "[]"
+  - changeSet:
+      id: 20231076-add-column-redirection
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - addColumn:
+            schema: awp_enterprise_automation
+            tableName: notes
+            columns:
+              - column:
+                  name: redirection
+                  type: int
+        - dropColumn:
+            schema: awp_enterprise_automation
+            tableName: products
+            columnName: value_by_area
+  - changeSet:
+      id: 20231029-add-column-redirection-id
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - addColumn:
+            schema: awp_enterprise_automation
+            tableName: notes
+            columns:
+              - column:
+                  name: redirection_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_notes_id
+                    references: notes(id)
