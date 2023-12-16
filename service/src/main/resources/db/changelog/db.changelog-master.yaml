@@ -336,3 +336,41 @@ databaseChangeLog:
                     nullable: true
                     foreignKeyName: fk_notes_id
                     references: notes(id)
+  - changeSet:
+      id: 20231216-create-iot-devices
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - createTable:
+            schema: awp_enterprise_automation
+            tableName: iot_devices
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(2048)
+              - column:
+                  name: topic
+                  type: varchar(2048)
+              - column:
+                  name: qos
+                  type: int
+              - column:
+                  name: area
+                  type: int
+              - column:
+                  name: location
+                  type: varchar(2048)
+              - column:
+                  name: type
+                  type: varchar(2048)
+              - column:
+                  name: data_type
+                  type: varchar(2048)
+              - column:
+                  name: comment
+                  type: varchar(4096)

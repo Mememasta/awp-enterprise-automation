@@ -91,6 +91,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public Mono<Void> updateProductCoefficient(ProductWithBalanceDTO request) {
         return getProductsWithBalanceByAreaIdAndProductId(request.areaId(), request.productId())
                 .flatMap(product -> productWithBalanceRepository.save(productWithBalanceMapper.buildProductDAO(product.id(), request)))
