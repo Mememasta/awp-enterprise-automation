@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
                 .thenMany(noteProductService.findAllTotalValue()
                 .flatMap(total -> getProductsWithBalanceByAreaIdAndProductId(total.area(), total.product_id())
                         .flatMapMany(product -> {
-                            var balance = total.status_0() - total.status_1() + total.status_2() + product.coefficient();
+                            var balance = total.status_0() - total.status_1() + total.status_2();
                             return productWithBalanceRepository.save(productWithBalanceMapper.buildProductDAO(product, balance));
                         })
                 )).thenMany(productWithBalanceRepository.findAll().map(productWithBalanceMapper::buildProduct));

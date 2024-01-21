@@ -12,7 +12,7 @@ public class ProductWithBalanceMapper {
                 .areaId(productWithBalanceDAO.areaId())
                 .productId(productWithBalanceDAO.productId())
                 .coefficient(productWithBalanceDAO.coefficient())
-                .balance(productWithBalanceDAO.balance())
+                .balance(productWithBalanceDAO.balance() + productWithBalanceDAO.coefficient())
                 .build();
     }
 
