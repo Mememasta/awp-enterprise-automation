@@ -41,7 +41,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Flux<ProductWithBalanceDTO> getAllProductsWithBalance() {
-        return noteProductService.findAllTotalValue().flatMap(total -> getProductsWithBalanceByAreaIdAndProductId(total.area(), total.product_id())
+        return noteProductService.findAllTotalValue()
+                .flatMap(total -> getProductsWithBalanceByAreaIdAndProductId(total.area(), total.product_id())
                 .map(product -> {
                     var balance = total.status_0() - total.status_1() + total.status_2() + product.coefficient();
                     return productWithBalanceMapper.buildProduct(balance, product);

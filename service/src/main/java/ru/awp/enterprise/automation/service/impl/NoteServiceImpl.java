@@ -2,7 +2,6 @@ package ru.awp.enterprise.automation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +28,7 @@ class NoteServiceImpl implements NoteService {
 
     @Override
     public Flux<NoteDAO> findByArea(Integer areaId) {
-        return noteRepository.findAllByArea(areaId, Sort.by("created").descending());
+        return noteRepository.findAllByArea(areaId, Sort.by("created", "updated").descending());
     }
 
     @Override
@@ -37,13 +36,13 @@ class NoteServiceImpl implements NoteService {
         if (Objects.isNull(page) || Objects.isNull(size)) {
             return findByArea(areaId);
         }
-        var anyPage = PageRequest.of(page, size, Sort.by("created").descending());
+        var anyPage = PageRequest.of(page, size, Sort.by("created", "updated").descending());
         return noteRepository.findAllByArea(areaId, anyPage);
     }
 
     @Override
     public Flux<NoteDAO> findByUserId(UUID userId) {
-        return noteRepository.findAllByUser(userId, Sort.by("created"));
+        return noteRepository.findAllByUser(userId, Sort.by("created", "updated").descending());
     }
 
     @Override
@@ -53,7 +52,7 @@ class NoteServiceImpl implements NoteService {
 
     @Override
     public Flux<NoteDAO> findAll() {
-        return noteRepository.findAll(Sort.by("created"));
+        return noteRepository.findAll(Sort.by("created", "updated").descending());
     }
 
     @Override

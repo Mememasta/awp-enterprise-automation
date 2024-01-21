@@ -24,7 +24,7 @@ public class ReportCardServiceImpl implements ReportCardService {
 
     @Override
     public Flux<ReportCardDAO> findByArea(Integer areaId) {
-        return repository.findAllByArea(areaId, Sort.by("created").descending());
+        return repository.findAllByArea(areaId, Sort.by("created", "updated").descending());
     }
 
     @Override
@@ -32,13 +32,13 @@ public class ReportCardServiceImpl implements ReportCardService {
         if (Objects.isNull(page) || Objects.isNull(size)) {
             return findByArea(areaId);
         }
-        var anyPage = PageRequest.of(page, size, Sort.by("created").descending());
+        var anyPage = PageRequest.of(page, size, Sort.by("created", "updated").descending());
         return repository.findAllByArea(areaId, anyPage);
     }
 
     @Override
     public Flux<ReportCardDAO> findByUserId(UUID userId) {
-        return repository.findAllByUser(userId, Sort.by("created"));
+        return repository.findAllByUser(userId, Sort.by("created", "updated").descending());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ReportCardServiceImpl implements ReportCardService {
 
     @Override
     public Flux<ReportCardDAO> findAll() {
-        return repository.findAll(Sort.by("created"));
+        return repository.findAll(Sort.by("created", "updated").descending());
     }
 
     @Override
