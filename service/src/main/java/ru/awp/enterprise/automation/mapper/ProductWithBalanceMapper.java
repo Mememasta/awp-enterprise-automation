@@ -7,12 +7,12 @@ import ru.awp.enterprise.automation.models.dto.ProductWithBalanceDTO;
 @Component
 public class ProductWithBalanceMapper {
 
-    public ProductWithBalanceDTO buildProduct(Integer balance, ProductWithBalanceDAO productWithBalanceDAO) {
+    public ProductWithBalanceDTO buildProduct(ProductWithBalanceDAO productWithBalanceDAO) {
         return ProductWithBalanceDTO.builder()
                 .areaId(productWithBalanceDAO.areaId())
                 .productId(productWithBalanceDAO.productId())
                 .coefficient(productWithBalanceDAO.coefficient())
-                .balance(balance)
+                .balance(productWithBalanceDAO.balance() + productWithBalanceDAO.coefficient())
                 .build();
     }
 
@@ -22,6 +22,16 @@ public class ProductWithBalanceMapper {
                 .areaId(productWithBalanceDTO.areaId())
                 .productId(productWithBalanceDTO.productId())
                 .coefficient(productWithBalanceDTO.coefficient())
+                .build();
+    }
+
+    public ProductWithBalanceDAO buildProductDAO(ProductWithBalanceDAO productWithBalanceDAO, Integer balance) {
+        return ProductWithBalanceDAO.builder()
+                .id(productWithBalanceDAO.id())
+                .areaId(productWithBalanceDAO.areaId())
+                .productId(productWithBalanceDAO.productId())
+                .coefficient(productWithBalanceDAO.coefficient())
+                .balance(balance)
                 .build();
     }
 

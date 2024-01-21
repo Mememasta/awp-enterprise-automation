@@ -17,6 +17,8 @@ public record ProductWithBalanceDAO(
         @Column(value = "product_id")
         Long productId,
         @Column(value = "coefficient")
-        Integer coefficient
+        Integer coefficient,
+        @Column(value = "balance")
+        Integer balance
 ) {
 }

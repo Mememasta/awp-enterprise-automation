@@ -41,13 +41,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Flux<ProductWithBalanceDTO> getAllProductsWithBalance() {
-        return noteProductService.findAllTotalValue()
+        return productWithBalanceRepository.cleanBalance()
+                .thenMany(noteProductService.findAllTotalValue()
                 .flatMap(total -> getProductsWithBalanceByAreaIdAndProductId(total.area(), total.product_id())
-                .map(product -> {
-                    var balance = total.status_0() - total.status_1() + total.status_2() + product.coefficient();
-                    return productWithBalanceMapper.buildProduct(balance, product);
-                })
-        );
+                        .flatMapMany(product -> {
+                            var balance = total.status_0() - total.status_1() + total.status_2() + product.coefficient();
+                            return productWithBalanceRepository.save(productWithBalanceMapper.buildProductDAO(product, balance));
+                        })
+                )).thenMany(productWithBalanceRepository.findAll().map(productWithBalanceMapper::buildProduct));
     }
 
     @Override

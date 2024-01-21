@@ -374,3 +374,16 @@ databaseChangeLog:
               - column:
                   name: comment
                   type: varchar(4096)
+  - changeSet:
+      id: 20240121-add-column-balance
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - addColumn:
+            schema: awp_enterprise_automation
+            tableName: products_with_balance
+            columns:
+              - column:
+                  name: balance
+                  type: int
+                  defaultValue: 0
