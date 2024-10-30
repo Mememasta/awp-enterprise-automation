@@ -17,7 +17,9 @@ dependencies {
     implementation(project(":api"))
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.liquibase:liquibase-core")
-
+    implementation("org.eclipse.paho:org.eclipse.paho.mqttv5.client:1.2.5")
+    implementation("org.springframework.integration:spring-integration-mqtt")
+    implementation("org.springframework.integration:spring-integration-jmx")
 
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     compileOnly("org.projectlombok:lombok")
