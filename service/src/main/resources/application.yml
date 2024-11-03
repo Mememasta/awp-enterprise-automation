@@ -40,6 +40,16 @@ cors:
 jwt:
   secret-key: 'foobar_123456789_foobar_123456789_foobar_123456789_foobar_123456789'
   expiration-date: 15
+    
+mqtt:
+  broker:
+    serverURIs: wss://mqtt.flopper.ru:8083
+    user-name: pssIoT
+    password: pss18IoT
+    clean-session: true
+    automatic-reconnect: true
+    max-reconnect-delay: 1000
+    connection-timeout: 10000
 
 management:
   endpoints:

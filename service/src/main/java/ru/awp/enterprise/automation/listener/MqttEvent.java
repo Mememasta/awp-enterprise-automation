@@ -5,7 +5,7 @@ import org.springframework.integration.mqtt.event.MqttIntegrationEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MqttListener implements ApplicationListener<MqttIntegrationEvent> {
+public class MqttEvent implements ApplicationListener<MqttIntegrationEvent> {
     @Override
     public void onApplicationEvent(MqttIntegrationEvent event) {
         System.out.println("MQTT EVENT: " + event);

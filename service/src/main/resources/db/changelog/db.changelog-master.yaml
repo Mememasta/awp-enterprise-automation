@@ -387,3 +387,11 @@ databaseChangeLog:
                   name: balance
                   type: int
                   defaultValue: 0
+  - changeSet:
+      id: 20241101-create-machine-data
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - sqlFile:
+            comment: create table machine_data
+            path: db/scripts/CREATE_MACHINE_DATA.sql
