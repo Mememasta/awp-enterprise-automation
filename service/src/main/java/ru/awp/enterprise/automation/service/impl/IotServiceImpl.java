@@ -32,10 +32,7 @@ public class IotServiceImpl implements IotService {
     void init() {
         iotRepository.findAll()
                 .map(IotDAO::topic)
-                .map(it -> {
-                    mqttAdapter.addTopic(it);
-                    return null;
-                }).subscribe();
+                .subscribe(it -> mqttAdapter.addTopic(it));
     }
 
     @Override
@@ -57,11 +54,10 @@ public class IotServiceImpl implements IotService {
     @Override
     public Mono<Void> update(UUID id, IotDTO iotDTO) {
         iotRepository.findById(id)
-                .map(it -> {
+                .subscribe(it -> {
                     mqttAdapter.removeTopic(it.topic());
                     mqttAdapter.addTopic(iotDTO.topic());
-                    return null;
-                }).subscribe();
+                });
 
         return iotRepository.save(iotDaoMapper.apply(id, iotDTO)).then();
     }
@@ -69,11 +65,9 @@ public class IotServiceImpl implements IotService {
     @Override
     public Mono<Void> delete(UUID id) {
         iotRepository.findById(id)
-                .map(it -> {
+                .subscribe(it -> {
                     mqttAdapter.removeTopic(it.topic());
-                    return null;
-                }).subscribe();
-        mqttAdapter.removeTopic();
+                });
         return iotRepository.deleteById(id);
     }
 }
