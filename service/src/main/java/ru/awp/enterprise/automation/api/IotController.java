@@ -1,6 +1,5 @@
 package ru.awp.enterprise.automation.api;
 
-import java.time.Duration;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +55,6 @@ public class IotController implements IotApi {
 
     @Override
     public Flux<MachineDataDTO> getHistoryData(HistoricDataRequest request) {
-        return machineDataService.findMachineDataByTopic(request.topic(), request.start(), request.end())
-                .delayElements(Duration.ofMillis(50));
+        return machineDataService.findMachineDataByTopic(request.topic(), request.start(), request.end());
     }
 }
