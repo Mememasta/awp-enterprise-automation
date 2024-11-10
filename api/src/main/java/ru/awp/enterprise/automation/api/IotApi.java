@@ -38,7 +38,7 @@ public interface IotApi {
     @PostMapping(value = "/add")
     Mono<ResponseEntity<HttpStatus>> addIot(@RequestBody @Validated IotDTO request);
 
-    @GetMapping(value = "/data/history")
+    @PostMapping(value = "/data/history")
     Flux<MachineDataDTO> getHistoryData(@RequestBody HistoricDataRequest request);
 
 }
