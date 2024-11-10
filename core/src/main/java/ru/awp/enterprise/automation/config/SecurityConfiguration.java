@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                         .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers("/metrics").permitAll()
                         .pathMatchers("/api/v1/authentication/auth").permitAll()
+                        .pathMatchers("/api/v1/iot_devices/data/history").permitAll()
                         .pathMatchers("/api/v1/user/me").hasRole("USER")
                         .pathMatchers("/api/v1/user/all").hasRole("USER")
                         .pathMatchers("/api/v1/user/*").hasRole("ADMIN")

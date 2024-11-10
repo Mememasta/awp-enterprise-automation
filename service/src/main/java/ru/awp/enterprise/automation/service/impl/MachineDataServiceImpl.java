@@ -1,7 +1,9 @@
 package ru.awp.enterprise.automation.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +22,10 @@ public class MachineDataServiceImpl implements MachineDataService {
     private final MachineDataMapper machineDataMapper;
 
     @Override
-    public Flux<MachineDataDTO> findMachineDataByTopic(String topic, Integer page, Integer size) {
-        var pages = PageRequest.of(page, size, Sort.by("event_date"));
-        return machineDataRepository.findAllByTopic(topic, pages)
+    public Flux<MachineDataDTO> findMachineDataByTopic(String topic, LocalDate start, LocalDate end) {
+        var startDateTime = LocalDateTime.of(start, LocalTime.MIN);
+        var endDateTime = LocalDateTime.of(end, LocalTime.MAX);
+        return machineDataRepository.findByTopicAndDateRange(topic, startDateTime, endDateTime, Sort.by("event_date"))
                 .map(machineDataMapper::apply);
     }
 

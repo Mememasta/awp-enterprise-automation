@@ -1,5 +1,6 @@
 package ru.awp.enterprise.automation.api;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -8,9 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.awp.enterprise.automation.models.dto.IotDTO;
+import ru.awp.enterprise.automation.models.dto.MachineDataDTO;
+import ru.awp.enterprise.automation.models.request.HistoricDataRequest;
 import ru.awp.enterprise.automation.service.IotService;
-
-import java.util.UUID;
+import ru.awp.enterprise.automation.service.MachineDataService;
 
 /**
  * @author MCHuchalov on 16.12.2023
@@ -21,6 +23,7 @@ import java.util.UUID;
 public class IotController implements IotApi {
 
     private final IotService iotService;
+    private final MachineDataService machineDataService;
 
     @Override
     public Flux<IotDTO> getIot(Integer areaId) {
@@ -48,5 +51,10 @@ public class IotController implements IotApi {
     public Mono<ResponseEntity<HttpStatus>> addIot(IotDTO request) {
         return iotService.save(request)
                 .then(Mono.defer(() -> Mono.just(new ResponseEntity<>(HttpStatus.OK))));
+    }
+
+    @Override
+    public Flux<MachineDataDTO> getHistoryData(HistoricDataRequest request) {
+        return machineDataService.findMachineDataByTopic(request.topic(), request.start(), request.end());
     }
 }
