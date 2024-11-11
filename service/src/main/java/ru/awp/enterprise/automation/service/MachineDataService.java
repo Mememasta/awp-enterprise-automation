@@ -7,7 +7,7 @@ import ru.awp.enterprise.automation.models.dto.MachineDataDTO;
 
 public interface MachineDataService {
 
-    Flux<MachineDataDTO> findMachineDataByTopic(String topic, LocalDate start, LocalDate end);
+    Flux<MachineDataDTO> findMachineDataByTopic(String topic, LocalDate start, LocalDate end, Long limit);
 
     Mono<Void> save(String topic, String value);
 

@@ -3,6 +3,9 @@ package ru.awp.enterprise.automation.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +24,12 @@ public class MachineDataServiceImpl implements MachineDataService {
     private final MachineDataMapper machineDataMapper;
 
     @Override
-    public Flux<MachineDataDTO> findMachineDataByTopic(String topic, LocalDate start, LocalDate end) {
+    public Flux<MachineDataDTO> findMachineDataByTopic(String topic, LocalDate start, LocalDate end, Long limit) {
         var startDateTime = LocalDateTime.of(start, LocalTime.MIN);
         var endDateTime = LocalDateTime.of(end, LocalTime.MAX);
-        return machineDataRepository.findByTopicAndDateRange(topic, startDateTime, endDateTime)
+        var result = machineDataRepository.findByTopicAndDateRange(topic, startDateTime, endDateTime)
                 .map(machineDataMapper::apply);
+        return calculateAverages(result, limit);
     }
 
     @Override
@@ -35,5 +39,30 @@ public class MachineDataServiceImpl implements MachineDataService {
                 .map(it -> machineDataMapper.apply(it, topic, value))
                 .flatMap(machineDataRepository::saveOrUpdate)
                 .then();
+    }
+
+    public Flux<MachineDataDTO> calculateAverages(Flux<MachineDataDTO> data, Long intervalInSeconds) {
+        return data
+                .groupBy(machineData -> {
+                    System.out.println(ChronoUnit.SECONDS.between(OffsetDateTime.MIN, machineData.eventDate()) / intervalInSeconds);
+                    return ChronoUnit.SECONDS.between(OffsetDateTime.MIN, machineData.eventDate()) / intervalInSeconds;
+                })
+                .flatMap(group -> group.collectList().map(this::calculateAverage));
+    }
+
+    private MachineDataDTO calculateAverage(List<MachineDataDTO> list) {
+        System.out.println(list);
+        double sum = 0;
+        OffsetDateTime eventDate = list.get(0).eventDate();
+        for (MachineDataDTO machineData : list) {
+            sum += Double.parseDouble(machineData.value());
+        }
+        double averageValue = sum / list.size();
+        return new MachineDataDTO(
+                null, // id
+                list.get(0).topic(), // topic
+                String.valueOf(averageValue), // average value
+                eventDate // average event date
+        );
     }
 }

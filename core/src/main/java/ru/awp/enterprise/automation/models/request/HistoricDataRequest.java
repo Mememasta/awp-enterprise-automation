@@ -11,7 +11,7 @@ public record HistoricDataRequest(
         LocalDate end,
 
         @JsonProperty(value = "limit")
-        String limit,
+        Long limit,
 
         @JsonProperty(value = "topic")
         String topic
