@@ -395,3 +395,11 @@ databaseChangeLog:
         - sqlFile:
             comment: create table machine_data
             path: db/scripts/CREATE_MACHINE_DATA.sql
+  - changeSet:
+      id: 20241111-change-event-date-type
+      author: MChuchalov
+      runInTransaction: false
+      changes:
+        - sqlFile:
+            comment: change event_date typy to timestamp with timezone
+            path: db/scripts/CHANGE_EVENT_DATE_TYPE.sql

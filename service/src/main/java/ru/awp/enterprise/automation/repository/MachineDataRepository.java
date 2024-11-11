@@ -1,7 +1,6 @@
 package ru.awp.enterprise.automation.repository;
 
 import java.time.LocalDateTime;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,8 +19,8 @@ public interface MachineDataRepository extends ReactiveSortingRepository<Machine
     @Query("SELECT nextval('machine_data_seq')")
     Mono<Long> getNextId();
 
-    @Query("SELECT * FROM awp_enterprise_automation.machine_data m WHERE m.topic = :topic AND m.event_date BETWEEN :startDate AND :endDate")
-    Flux<MachineDataDAO> findByTopicAndDateRange(@Param("topic") String topic, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, Sort sort);
+    @Query("SELECT * FROM awp_enterprise_automation.machine_data m WHERE m.topic = :topic AND m.event_date BETWEEN :startDate AND :endDate ORDER BY m.event_date")
+    Flux<MachineDataDAO> findByTopicAndDateRange(@Param("topic") String topic, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     @Modifying
     @Query("INSERT INTO machine_data (id, topic, value, event_date) VALUES (:#{#dao.id}, :#{#dao.topic}, :#{#dao.value}, :#{#dao.eventDate}) ON CONFLICT (id) DO UPDATE SET topic = :#{#dao.topic}, value = :#{#dao.value}, event_date = :#{#dao.eventDate}")

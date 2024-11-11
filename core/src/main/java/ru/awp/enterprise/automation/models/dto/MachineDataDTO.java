@@ -1,9 +1,8 @@
 package ru.awp.enterprise.automation.models.dto;
 
-import lombok.Builder;
-
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import lombok.Builder;
 
 
 @Builder
@@ -11,5 +10,5 @@ public record MachineDataDTO(
         Long id,
         String topic,
         String value,
-        LocalDateTime eventDate
+        OffsetDateTime eventDate
 ) implements Serializable {}

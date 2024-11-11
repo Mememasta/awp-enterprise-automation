@@ -1,10 +1,9 @@
 package ru.awp.enterprise.automation.mapper;
 
+import java.time.OffsetDateTime;
 import org.springframework.stereotype.Component;
 import ru.awp.enterprise.automation.models.dao.MachineDataDAO;
 import ru.awp.enterprise.automation.models.dto.MachineDataDTO;
-
-import java.time.LocalDateTime;
 
 @Component
 public class MachineDataMapper {
@@ -32,7 +31,7 @@ public class MachineDataMapper {
                 .id(id)
                 .topic(topic)
                 .value(value)
-                .eventDate(LocalDateTime.now())
+                .eventDate(OffsetDateTime.now())
                 .build();
     }
 }

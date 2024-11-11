@@ -1,12 +1,11 @@
 package ru.awp.enterprise.automation.models.dao;
 
+import java.time.OffsetDateTime;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -22,5 +21,5 @@ public class MachineDataDAO {
     private String value;
 
     @Column("event_date")
-    private LocalDateTime eventDate;
+    private OffsetDateTime eventDate;
 }
