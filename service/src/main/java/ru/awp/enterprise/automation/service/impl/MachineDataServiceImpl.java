@@ -43,15 +43,11 @@ public class MachineDataServiceImpl implements MachineDataService {
 
     public Flux<MachineDataDTO> calculateAverages(Flux<MachineDataDTO> data, Long intervalInSeconds) {
         return data
-                .groupBy(machineData -> {
-                    System.out.println(ChronoUnit.SECONDS.between(OffsetDateTime.MIN, machineData.eventDate()) / intervalInSeconds);
-                    return ChronoUnit.SECONDS.between(OffsetDateTime.MIN, machineData.eventDate()) / intervalInSeconds;
-                })
-                .flatMap(group -> group.collectList().map(this::calculateAverage));
+                .groupBy(machineData -> ChronoUnit.SECONDS.between(OffsetDateTime.MIN, machineData.eventDate()) / intervalInSeconds)
+                .flatMapSequential(group -> group.collectList().map(this::calculateAverage));
     }
 
     private MachineDataDTO calculateAverage(List<MachineDataDTO> list) {
-        System.out.println(list);
         double sum = 0;
         OffsetDateTime eventDate = list.get(0).eventDate();
         for (MachineDataDTO machineData : list) {
