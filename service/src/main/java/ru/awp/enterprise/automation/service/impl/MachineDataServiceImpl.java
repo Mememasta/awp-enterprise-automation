@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,24 +45,27 @@ public class MachineDataServiceImpl implements MachineDataService {
 
     public Flux<MachineDataDTO> calculateAverages(Flux<MachineDataDTO> data, Long intervalInSeconds) {
         return data
-                .groupBy(machineData -> ChronoUnit.SECONDS.between(OffsetDateTime.MIN, machineData.eventDate()) / intervalInSeconds)
-                .flatMapSequential(group -> group.collectList()
-                        .map(this::calculateAverage));
+                .collectMultimap(machineData -> ChronoUnit.SECONDS.between(OffsetDateTime.MIN, machineData.eventDate()) / intervalInSeconds)
+                .flatMapIterable(Map::values)
+                .map(this::calculateAverage)
+                .sort(Comparator.comparing(MachineDataDTO::eventDate));
     }
 
-    private MachineDataDTO calculateAverage(List<MachineDataDTO> list) {
-        double sum = 0;
-        var cleanedList = list.stream()
+
+    private MachineDataDTO calculateAverage(Collection<MachineDataDTO> list) {
+        var firstValue = list.stream().findFirst().orElse(null);
+        double sum = list.stream()
                 .filter(it -> Double.parseDouble(it.value()) != -127D)
-                .toList();
-        OffsetDateTime eventDate = cleanedList.get(0).eventDate();
-        for (MachineDataDTO machineData : cleanedList) {
-                sum += Double.parseDouble(machineData.value());
-        }
-        double averageValue = sum / cleanedList.size();
+                .mapToDouble(it -> Double.parseDouble(it.value()))
+                .sum();
+        long cleanedListSize = list.stream()
+                .filter(it -> Double.parseDouble(it.value()) != -127D)
+                .count();
+        OffsetDateTime eventDate = firstValue.eventDate();
+        double averageValue = cleanedListSize > 0 ? sum / cleanedListSize : 0;
         return new MachineDataDTO(
                 null, // id
-                cleanedList.get(0).topic(), // topic
+                firstValue.topic(), // topic
                 String.valueOf(averageValue), // average value
                 eventDate // average event date
         );
