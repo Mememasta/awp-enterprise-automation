@@ -44,22 +44,23 @@ public class MachineDataServiceImpl implements MachineDataService {
     public Flux<MachineDataDTO> calculateAverages(Flux<MachineDataDTO> data, Long intervalInSeconds) {
         return data
                 .groupBy(machineData -> ChronoUnit.SECONDS.between(OffsetDateTime.MIN, machineData.eventDate()) / intervalInSeconds)
-                .flatMapSequential(group -> group.collectList().map(this::calculateAverage));
+                .flatMapSequential(group -> group.collectList()
+                        .map(this::calculateAverage));
     }
 
     private MachineDataDTO calculateAverage(List<MachineDataDTO> list) {
         double sum = 0;
-        OffsetDateTime eventDate = list.get(0).eventDate();
-        for (MachineDataDTO machineData : list) {
-            var value = Double.parseDouble(machineData.value());
-            if (value != -127D) {
-                sum += value;
-            }
+        var cleanedList = list.stream()
+                .filter(it -> Double.parseDouble(it.value()) != -127D)
+                .toList();
+        OffsetDateTime eventDate = cleanedList.get(0).eventDate();
+        for (MachineDataDTO machineData : cleanedList) {
+                sum += Double.parseDouble(machineData.value());
         }
-        double averageValue = sum / list.size();
+        double averageValue = sum / cleanedList.size();
         return new MachineDataDTO(
                 null, // id
-                list.get(0).topic(), // topic
+                cleanedList.get(0).topic(), // topic
                 String.valueOf(averageValue), // average value
                 eventDate // average event date
         );
