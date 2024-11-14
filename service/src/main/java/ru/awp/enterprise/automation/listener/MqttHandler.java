@@ -14,11 +14,11 @@ public class MqttHandler implements MessageHandler {
     @Override
     public void handleMessage(Message<?> message) throws MessagingException {
         String topic = (String) message.getHeaders().get("mqtt_receivedTopic");
-        String value = (String) message.getPayload();
-        if (value.equals("-127")) {
+        double value = Double.parseDouble((String) message.getPayload());
+        if (value == -127D) {
             return;
         }
         System.out.println("TOPIC: " + topic + ", MESSAGE: " + value);
-        machineDataService.save(topic, value).subscribe();
+        machineDataService.save(topic, String.valueOf(value)).subscribe();
     }
 }

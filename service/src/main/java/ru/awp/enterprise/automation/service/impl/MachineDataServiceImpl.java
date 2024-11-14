@@ -51,7 +51,10 @@ public class MachineDataServiceImpl implements MachineDataService {
         double sum = 0;
         OffsetDateTime eventDate = list.get(0).eventDate();
         for (MachineDataDTO machineData : list) {
-            sum += Double.parseDouble(machineData.value());
+            var value = Double.parseDouble(machineData.value());
+            if (value != -127D) {
+                sum += Double.parseDouble(machineData.value());
+            }
         }
         double averageValue = sum / list.size();
         return new MachineDataDTO(
