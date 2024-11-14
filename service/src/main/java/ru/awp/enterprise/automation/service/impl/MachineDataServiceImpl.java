@@ -53,7 +53,7 @@ public class MachineDataServiceImpl implements MachineDataService {
         for (MachineDataDTO machineData : list) {
             var value = Double.parseDouble(machineData.value());
             if (value != -127D) {
-                sum += Double.parseDouble(machineData.value());
+                sum += value;
             }
         }
         double averageValue = sum / list.size();
